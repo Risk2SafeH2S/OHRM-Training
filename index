@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OHA Studio Training · Risk2Safe</title>
+<meta name="description" content="Interactive training course for OHA Studio: engagement set-up, OHID, SEGs, OHRA, exposure statistics, controls, reporting, QA and the ADNOC HSE-OH-ST03 framework.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231D5FA8'/%3E%3Cpath d='M7 23 L13 15 L18 19 L25 8' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF1F3; --panel:#FFFFFF; --ink:#16232B; --steel:#55656F; --mute:#7B8A93;
+  --rule:#D3DBE0; --rule-strong:#B7C3CA; --accent:#1D5FA8; --accent-ink:#164C87; --accent-soft:#E4EEF8;
+  --ok:#2E7A4B; --ok-soft:#E3F1E8; --warn:#9A5F0C; --warn-soft:#FBF0DC; --crit:#B3261E; --crit-soft:#FBE6E4;
+  --c0:#D3E6F1; --c1:#A6D1B6; --c2:#EAD88F; --c3:#EBA960; --c4:#CC4B3F;
+  --sans:'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans);font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+.shell{display:grid;grid-template-columns:280px 1fr;grid-template-rows:56px 1fr;height:100vh}
+header.top{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:0 20px;background:var(--panel);border-bottom:1px solid var(--rule)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.brand small{font-weight:500;color:var(--steel)}
+.prog{flex:1;display:flex;align-items:center;gap:10px;justify-content:flex-end;font-size:13px;color:var(--steel)}
+.bar{width:180px;height:8px;border-radius:4px;background:var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+nav.rail{background:var(--panel);border-right:1px solid var(--rule);overflow-y:auto;padding:14px 0 24px}
+.train{position:relative;list-style:none;margin:0;padding:0}
+.train::before{content:"";position:absolute;left:31px;top:16px;bottom:16px;width:2px;background:var(--rule)}
+.train button{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:8px 14px 8px 20px;cursor:pointer;border-left:3px solid transparent}
+.train button:hover{background:var(--paper)}
+.train button[aria-current="page"]{background:var(--accent-soft);border-left-color:var(--accent)}
+.dot{position:relative;z-index:1;width:24px;height:24px;border-radius:50%;border:2px solid var(--rule-strong);background:var(--panel);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--steel)}
+.dot.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.dot.started{border-color:var(--accent);color:var(--accent)}
+.lbl{display:flex;flex-direction:column;line-height:1.25}
+.lbl b{font-size:13.5px;font-weight:600}
+.lbl span{font-size:12px;color:var(--steel)}
+main{overflow:auto;padding:28px 32px 80px}
+.wrap{max-width:900px}
+.mod-head{margin-bottom:22px}
+.mod-head .num{font-weight:700;color:var(--accent);font-size:13px}
+h1{font-size:28px;line-height:1.15;margin:4px 0 8px;letter-spacing:-.02em}
+.mod-head p.lede{font:17px/1.6 var(--serif);color:var(--steel);margin:0;max-width:66ch}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--steel)}
+h2{font-size:19px;margin:0 0 6px;letter-spacing:-.01em}
+h3{font-size:15px;margin:18px 0 6px}
+.sec{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:20px 24px;margin-bottom:16px}
+.prose p,.prose li{font:16px/1.65 var(--serif);max-width:68ch}
+.prose ul,.prose ol{padding-left:22px}
+.prose li{margin:4px 0}
+.prose b{font-family:var(--sans);font-size:15px;font-weight:600}
+.objectives{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0}
+.objectives b{display:block;margin-bottom:4px}
+.objectives ul{margin:0;padding-left:20px}
+.objectives li{font-size:14px;margin:2px 0}
+details{border:1px solid var(--rule);border-radius:6px;margin:10px 0;background:#FAFBFC}
+details>summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"Show";font-weight:500;color:var(--accent);font-size:13px}
+details[open]>summary::after{content:"Hide"}
+details>div{padding:0 16px 12px}
+details.why>summary{color:var(--ok)}
+details.hood>summary{color:var(--accent-ink)}
+.lab{border:1px solid var(--rule-strong);border-radius:8px;background:#fff;overflow:hidden;margin:6px 0}
+.lab-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 16px;background:#F3F6F8;border-bottom:1px solid var(--rule)}
+.lab-head b{font-size:14px}
+.lab-head span{font-size:12.5px;color:var(--steel)}
+.lab-body{padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:12.5px;font-weight:600;color:var(--steel)}
+.field input,.field select{border:1px solid var(--rule-strong);border-radius:4px;padding:7px 9px;background:#fff}
+input[type=range]{width:100%}
+table.t{border-collapse:collapse;width:100%;font-size:13.5px}
+.t th{background:#F5F7F8;text-align:left;font-weight:600;color:var(--steel);padding:7px 8px;border-bottom:1px solid var(--rule);font-size:12.5px}
+.t td{border-bottom:1px solid var(--rule);padding:6px 8px;vertical-align:top}
+.t tr:last-child td{border-bottom:0}
+.t input[type=number]{width:90px;border:1px solid var(--rule-strong);border-radius:3px;padding:4px 6px}
+.t select{border:1px solid var(--rule-strong);border-radius:3px;padding:4px 6px;background:#fff}
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:4px}
+.kv{border-collapse:collapse;width:100%;font-size:13.5px}
+.kv th{text-align:left;color:var(--steel);font-weight:500;padding:4px 14px 4px 0;white-space:nowrap;width:1%}
+.kv td{padding:4px 0}
+.pill{display:inline-block;padding:1px 9px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.crit{background:var(--crit-soft);color:var(--crit)}.pill.info{background:var(--accent-soft);color:var(--accent-ink)}.pill.med{background:#FBF3C2;color:#6E5600}.pill.none{background:var(--paper);color:var(--steel)}
+.cat{display:inline-grid;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:4px;font-weight:700;font-size:12px}
+.cat0{background:var(--c0)}.cat1{background:var(--c1)}.cat2{background:var(--c2)}.cat3{background:var(--c3)}.cat4{background:var(--c4);color:#fff}
+.btn{text-decoration:none;color:var(--ink);border:1px solid var(--rule-strong);background:var(--panel);border-radius:4px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:13.5px}
+.btn:hover{border-color:var(--steel)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.cert{break-inside:avoid}
+.btn.primary:hover{background:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 4px 4px 0;margin:10px 0;font-size:14px}
+.callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+.callout.ok{border-color:var(--ok);background:var(--ok-soft)}
+.callout.crit{border-color:var(--crit);background:var(--crit-soft)}
+/* workflow map */
+.flow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:6px 0 12px}
+.flow button{border:1px solid var(--rule-strong);background:#fff;border-radius:6px;padding:10px 6px;cursor:pointer;text-align:center;position:relative}
+.flow button b{display:block;font-size:20px;color:var(--accent);line-height:1}
+.flow button span{font-size:12px;font-weight:600}
+.flow button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.flow button[aria-pressed="true"] b{color:#fff}
+.flow-detail{border:1px solid var(--rule);border-radius:6px;padding:12px 16px;background:#FAFBFC;min-height:110px}
+.cascade{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.cascade span{background:#fff;border:1px solid var(--rule-strong);border-radius:4px;padding:6px 10px;font-size:13px}
+.cascade i{font-style:normal;color:var(--mute)}
+/* quiz */
+.quiz{border-top:1px solid var(--rule);margin-top:6px}
+.q{padding:14px 0;border-bottom:1px solid var(--rule)}
+.q:last-child{border-bottom:0}
+.q p.stem{font-weight:600;margin:0 0 8px;max-width:72ch}
+.q .scen{font:15px/1.6 var(--serif);color:var(--steel);margin:0 0 8px;max-width:70ch}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opts button{text-align:left;border:1px solid var(--rule-strong);background:#fff;border-radius:6px;padding:9px 12px;cursor:pointer;font-size:14px}
+.opts button:hover{border-color:var(--accent)}
+.opts button.right{border-color:var(--ok);background:var(--ok-soft)}
+.opts button.wrong{border-color:var(--crit);background:var(--crit-soft)}
+.fb{margin-top:8px;font-size:14px}
+.next-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap}
+.matrix td{text-align:center;font-weight:700;font-size:12px;min-width:44px;height:30px;cursor:pointer;border:2px solid #fff}
+.matrix td.sel{outline:3px solid var(--ink);outline-offset:-3px}
+.sort-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule)}
+.sort-item:last-child{border-bottom:0}
+.plot svg{width:100%;height:auto;display:block}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;word-break:break-all}
+.cert{border:3px double var(--accent);border-radius:8px;padding:32px;text-align:center;background:#fff}
+.cert h2{font:600 26px/1.2 var(--serif);margin:8px 0}
+.cert .who{font:600 30px/1.2 var(--serif);margin:14px 0;color:var(--accent-ink)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:4px;font-size:13px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:900px){.shell{grid-template-columns:1fr;grid-template-rows:auto auto 1fr}header.top{flex-wrap:wrap;height:auto;padding:8px 14px}nav.rail{max-height:200px;border-right:0;border-bottom:1px solid var(--rule)}.grid2{grid-template-columns:1fr}.flow{grid-template-columns:repeat(4,1fr)}main{padding:18px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{.shell>header,.shell>nav,.no-print{display:none!important}.shell{display:block;height:auto}main{overflow:visible;padding:0}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="brand"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1D5FA8"/><path d="M7 23 L13 15 L18 19 L25 8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg><span>OHA Studio Training <small>Risk2Safe</small></span></div>
+    <div class="prog"><span id="progTxt"></span><div class="bar" aria-hidden="true"><i id="progBar"></i></div><a class="btn" href="https://risk2safeh2s.github.io/Occupational-Health-Risk-Assessment/" target="_blank" rel="noopener">Open OHA Studio</a></div>
+  </header>
+  <nav class="rail" id="rail" aria-label="Course modules"></nav>
+  <main id="main" tabindex="-1"><div class="wrap" id="view"></div></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+/*STATS-BEGIN*/
+const OHStats = (() => {
+  const VERSION = '1.1.0';
+
+  // ---------- basic distributions ----------
+  function normCdf(x) {
+    // W. J. Cody-style erfc via rational approximation (abs error < 1.2e-7)
+    const z = Math.abs(x) / Math.SQRT2;
+    const t = 1 / (1 + 0.5 * z);
+    const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 +
+      t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+    return x >= 0 ? 1 - r / 2 : r / 2;
+  }
+  function normInv(p) {
+    // Acklam's algorithm with one Newton refinement step
+    if (p <= 0) return -Infinity; if (p >= 1) return Infinity;
+    const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+    const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+    const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+    const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+    const pl = 0.02425; let q, r, x;
+    if (p < pl) { q = Math.sqrt(-2 * Math.log(p)); x = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    else if (p <= 1 - pl) { q = p - 0.5; r = q * q; x = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1); }
+    else { q = Math.sqrt(-2 * Math.log(1 - p)); x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const e = normCdf(x) - p; const u = e * Math.sqrt(2 * Math.PI) * Math.exp(x * x / 2);
+    return x - u / (1 + x * u / 2);
+  }
+  function lgamma(x) {
+    const g = 7, cf = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (x < 0.5) return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * x))) - lgamma(1 - x);
+    x -= 1; let a = cf[0]; const t = x + g + 0.5;
+    for (let i = 1; i < g + 2; i++) a += cf[i] / (x + i);
+    return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+  }
+
+  // Noncentral t CDF: P(T <= t), T = (Z + delta) / S, S = sqrt(V/nu), V ~ chi2(nu)
+  function nctCdf(t, nu, delta) {
+    const N = 4000, smax = 1 + 14 / Math.sqrt(2 * nu) + 2;
+    const h = smax / N;
+    const lc = Math.log(2) + (nu / 2) * Math.log(nu / 2) - lgamma(nu / 2);
+    const f = s => s <= 0 ? 0 : Math.exp(lc + (nu - 1) * Math.log(s) - nu * s * s / 2) * normCdf(t * s - delta);
+    let sum = f(0) + f(smax);
+    for (let i = 1; i < N; i++) sum += f(i * h) * (i % 2 ? 4 : 2);
+    return Math.min(1, Math.max(0, sum * h / 3));
+  }
+  function nctInv(p, nu, delta) {
+    let lo = delta - 10, hi = delta + 10;
+    while (nctCdf(lo, nu, delta) > p) lo -= 10;
+    while (nctCdf(hi, nu, delta) < p) hi += 10;
+    for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; if (nctCdf(m, nu, delta) < p) lo = m; else hi = m; }
+    return (lo + hi) / 2;
+  }
+  const tInv = (p, nu) => nctInv(p, nu, 0);
+
+  // One-sided tolerance factor: UCL(gamma) of the p-th percentile = exp(ybar + K s)
+  function kFactor(n, p, gamma) { return nctInv(gamma, n - 1, normInv(p) * Math.sqrt(n)) / Math.sqrt(n); }
+
+  // ---------- shift adjustment ----------
+  function briefScala(hoursPerShift) {
+    const h = Number(hoursPerShift);
+    if (!h || h <= 8) return 1;
+    return (8 / h) * ((24 - h) / 16);
+  }
+
+  // ---------- non-detects: robust ROS (Helsel 2005), multiple detection limits ----------
+  function ros(obs) {
+    const det = obs.filter(o => !o.nd).map(o => o.v);
+    const nds = obs.filter(o => o.nd).map(o => o.v);
+    if (!nds.length) return { values: det.slice(), method: 'No non-detects', imputed: 0 };
+    const frac = nds.length / obs.length;
+    if (det.length < 3 || frac > 0.8) {
+      return { values: det.concat(nds.map(v => v / Math.SQRT2)), method: 'Substitution LOD/\u221A2 (too few detects for ROS)', imputed: nds.length, fallback: true };
+    }
+    const dls = [...new Set(nds)].sort((a, b) => a - b), J = dls.length;
+    const pe = new Array(J + 1).fill(0);
+    for (let j = J - 1; j >= 0; j--) {
+      const lo = dls[j], hi = j + 1 < J ? dls[j + 1] : Infinity;
+      const A = det.filter(x => x >= lo && x < hi).length;
+      const B = det.filter(x => x < lo).length + nds.filter(x => x <= lo).length;
+      pe[j] = pe[j + 1] + (A + B > 0 ? (A / (A + B)) * (1 - pe[j + 1]) : 0);
+    }
+    const pts = []; // detects: {p, v}
+    const below = det.filter(x => x < dls[0]).sort((a, b) => a - b);
+    below.forEach((v, i) => pts.push({ p: (1 - pe[0]) * (i + 1) / (below.length + 1), v }));
+    for (let j = 0; j < J; j++) {
+      const lo = dls[j], hi = j + 1 < J ? dls[j + 1] : Infinity;
+      const grp = det.filter(x => x >= lo && x < hi).sort((a, b) => a - b);
+      grp.forEach((v, i) => pts.push({ p: (1 - pe[j]) + (pe[j] - pe[j + 1]) * (i + 1) / (grp.length + 1), v }));
+    }
+    const xs = pts.map(q => normInv(q.p)), ys = pts.map(q => Math.log(q.v));
+    const mx = mean(xs), my = mean(ys);
+    let sxy = 0, sxx = 0; xs.forEach((x, i) => { sxy += (x - mx) * (ys[i] - my); sxx += (x - mx) ** 2; });
+    const slope = sxy / sxx, icpt = my - slope * mx;
+    const imputed = [];
+    for (let j = 0; j < J; j++) {
+      const c = nds.filter(x => x === dls[j]).length;
+      for (let r = 1; r <= c; r++) imputed.push(Math.exp(icpt + slope * normInv((1 - pe[j]) * r / (c + 1))));
+    }
+    return { values: det.concat(imputed), method: 'Robust ROS (Helsel)', imputed: imputed.length };
+  }
+
+  const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+  const sd = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1)); };
+
+  // Probability-plot correlation coefficient on logs (lognormal fit check)
+  function ppcc(values) {
+    const y = values.map(Math.log).sort((a, b) => a - b), n = y.length;
+    const x = y.map((_, i) => normInv((i + 1 - 0.375) / (n + 0.25)));
+    const mx = mean(x), my = mean(y); let sxy = 0, sxx = 0, syy = 0;
+    x.forEach((xi, i) => { sxy += (xi - mx) * (y[i] - my); sxx += (xi - mx) ** 2; syy += (y[i] - my) ** 2; });
+    return syy === 0 ? 1 : sxy / Math.sqrt(sxx * syy);
+  }
+
+  function efUCL(n, ybar, s, lnOel, gamma) {
+    const tObs = Math.sqrt(n) * (lnOel - ybar) / s;
+    let lo = -60, hi = 60;
+    for (let i = 0; i < 70; i++) { const m = (lo + hi) / 2; if (nctCdf(tObs, n - 1, m) > gamma) lo = m; else hi = m; }
+    return normCdf(-((lo + hi) / 2) / Math.sqrt(n));
+  }
+
+
+  // ---------- AM 95% UCL by generalized confidence interval (Krishnamoorthy & Mathew 2003) ----------
+  // Closely approximates Land's exact UCL (as reported by IHSTAT). Seeded, so results are reproducible.
+  function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  function amUclGCI(ybar, s, n, conf = 0.95, M = 100000, seed = 20190801) {
+    if (n < 2 || !(s > 0)) return NaN;
+    const R = rng(seed);
+    const nrm = () => { let u = 0; while (u === 0) u = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * R()); };
+    const gam = k => { // Marsaglia-Tsang
+      if (k < 1) { let u = 0; while (u === 0) u = R(); return gam(k + 1) * Math.pow(u, 1 / k); }
+      const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
+      for (;;) { let x, v; do { x = nrm(); v = 1 + c * x; } while (v <= 0); v = v * v * v; const u = R();
+        if (u < 1 - 0.0331 * x ** 4 || Math.log(u) < 0.5 * x * x + d * (1 - v + Math.log(v))) return d * v; }
+    };
+    const df = n - 1, T = new Float64Array(M), k = df / 2;
+    for (let i = 0; i < M; i++) { const U = 2 * gam(k), Z = nrm(); T[i] = ybar - Z * (s / Math.sqrt(n)) * Math.sqrt(df / U) + 0.5 * df * s * s / U; }
+    T.sort();
+    return Math.exp(T[Math.floor(conf * M)]);
+  }
+
+  // ---------- ADNOC HSE-OH-ST03 (OHRM, Aug 2019) Appendix 3 and Appendix 2 rules ----------
+  // Matrix read from Appendix 9: R = High/Cat 1, O = High-Medium/Cat 2, Y = Medium/Cat 3, G = Low/Cat 4
+  const ADNOC_MATRIX = { 6: 'ORRRRR', 5: 'YORRRR', 4: 'YYORRR', 3: 'GYYOOR', 2: 'GGYYYO', 1: 'GGGGYY' };
+  const ADNOC_CAT = { R: { n: 1, label: 'High / Category 1' }, O: { n: 2, label: 'High-Medium / Category 2' }, Y: { n: 3, label: 'Medium / Category 3' }, G: { n: 4, label: 'Low / Category 4' } };
+  function adnocHRR(sev, like) {
+    const row = ADNOC_MATRIX[Number(sev)], i = 'ABCDEF'.indexOf(String(like || '').toUpperCase());
+    if (!row || i < 0) return null;
+    const k = row[i]; return { code: String(sev) + 'ABCDEF'[i], key: k, n: ADNOC_CAT[k].n, label: ADNOC_CAT[k].label };
+  }
+  // Appendix 3 Table 3: quantitative likelihood from 95% UCL as a fraction of OEL
+  function adnocQuantLikelihood(r) { if (!(r >= 0)) return null; return r >= 2 ? 'F' : r > 1 ? 'E' : r > 0.5 ? 'D' : r > 0.1 ? 'C' : r > 0.01 ? 'B' : 'A'; }
+  // Appendix 2 (a)(ii)-2 survey frequency (the section cited by clause 7(h))
+  function adnocFrequency(r) { if (!(r >= 0)) return null; return r < 0.01 ? 'Every 5 years' : r < 0.1 ? 'Every 4 years' : r < 0.5 ? 'Every 3 years' : r <= 1 ? 'Annual' : 'Reassess after added controls; repeat until below OEL'; }
+  // Appendix 3 Table 1: qualitative likelihood by exposure hours per week (frequency criterion only)
+  function adnocLikeFromHours(h) { if (h === null || h === undefined || h === '' || isNaN(h)) return null; h = Number(h); return h > 40 ? 'F' : h > 30 ? 'E' : h > 20 ? 'D' : h > 10 ? 'C' : h > 5 ? 'B' : 'A'; }
+
+  const EN689_PRELIM = { 3: 0.1, 4: 0.15, 5: 0.2 };
+  function aihaCategory(ratio) {
+    if (ratio <= 0.01) return 0; if (ratio <= 0.1) return 1; if (ratio <= 0.5) return 2; if (ratio <= 1) return 3; return 4;
+  }
+
+  // Main analysis. obs: [{v, nd}], oel: number in same unit (already shift-adjusted if required)
+  function analyse(obs, oel, opt = {}) {
+    const gA = opt.confAIHA || 0.95, gE = opt.confEN || 0.70;
+    const n = obs.length, out = { n, nd: obs.filter(o => o.nd).length, engine: VERSION, oel, flags: [] };
+    if (!n) return out;
+    out.max = Math.max(...obs.map(o => o.v));
+    out.min = Math.min(...obs.map(o => o.v));
+    // EN 689 preliminary test (3-5 samples)
+    if (n >= 3 && n <= 5 && oel) {
+      const thr = EN689_PRELIM[n] * oel;
+      if (obs.some(o => !o.nd && o.v > oel)) out.en689 = { test: 'Preliminary', outcome: 'Non-compliance', note: 'A result exceeds the OEL.' };
+      else if (obs.every(o => o.v < thr)) out.en689 = { test: 'Preliminary', outcome: 'Compliance', note: `All results below ${EN689_PRELIM[n]} \u00D7 OEL.` };
+      else out.en689 = { test: 'Preliminary', outcome: 'No decision', note: 'Collect at least 6 samples for the statistical test.' };
+    }
+    if (n < 2) { out.flags.push('Fewer than 2 results: no statistics.'); return out; }
+    const r = ros(obs); out.censorMethod = r.method; out.imputed = r.imputed;
+    if (r.fallback) out.flags.push('Too few detects for ROS; substitution used (labelled fallback).');
+    const y = r.values.map(Math.log), ybar = mean(y), s = sd(y);
+    out.gm = Math.exp(ybar); out.gsd = Math.exp(s);
+    out.am = Math.exp(ybar + s * s / 2);
+    out.x95 = Math.exp(ybar + 1.6448536 * s);
+    out.ppcc = ppcc(r.values);
+    if (n >= 3) {
+      out.kAIHA = kFactor(n, 0.95, gA); out.x95ucl = Math.exp(ybar + out.kAIHA * s);
+      const tq = tInv(0.95, n - 1);
+      out.amUclCox = Math.exp(ybar + s * s / 2 + tq * Math.sqrt(s * s / n + s ** 4 / (2 * (n - 1))));
+    }
+    out.amUcl = amUclGCI(ybar, s, n, 0.95);
+    if (out.gsd > 3) out.flags.push('GSD > 3: review SEG homogeneity (EN 689).');
+    if (out.nd / n > 0.5) out.flags.push('More than 50% non-detects.');
+    if (out.ppcc < 0.9 && n >= 5) out.flags.push('Poor lognormal fit (probability-plot r < 0.90): check for mixed groups.');
+    if (oel && s > 0) {
+      const lnO = Math.log(oel);
+      out.ef = 1 - normCdf((lnO - ybar) / s);
+      if (n >= 3) out.efUcl = efUCL(n, ybar, s, lnO, gA);
+      out.ratioX95 = out.x95 / oel;
+      out.aihaCat = aihaCategory(out.x95 / oel);
+      if (out.x95ucl) out.aihaCatUcl = aihaCategory(out.x95ucl / oel);
+      if (n >= 6) {
+        const UT = kFactor(n, 0.95, gE), UR = (lnO - ybar) / s;
+        out.en689 = { test: 'Statistical', UT, UR, utl: Math.exp(ybar + UT * s),
+          outcome: UR >= UT ? 'Compliance' : 'Non-compliance',
+          note: `UTL(${Math.round(gE * 100)}%, 95%) = ${fmt(Math.exp(ybar + UT * s))} vs OEL ${fmt(oel)}.` };
+      }
+    }
+    out.plot = plotPoints(r.values, obs);
+    return out;
+  }
+
+  function plotPoints(values, obs) {
+    const ndCount = obs.filter(o => o.nd).length, detCount = obs.length - ndCount;
+    const sorted = values.map((v, i) => ({ v, imputed: i >= detCount })).sort((a, b) => a.v - b.v), n = sorted.length;
+    return sorted.map((p, i) => ({ z: normInv((i + 1 - 0.375) / (n + 0.25)), v: p.v, imputed: p.imputed && ndCount > 0 }));
+  }
+
+  function fmt(x, d = 3) {
+    if (x === undefined || x === null || isNaN(x)) return '\u2013';
+    if (x === 0) return '0';
+    const a = Math.abs(x);
+    if (a >= 1000) return x.toFixed(0);
+    return Number(x.toPrecision(d)).toString();
+  }
+
+  return { VERSION, amUclGCI, adnocHRR, adnocQuantLikelihood, adnocFrequency, adnocLikeFromHours, ADNOC_MATRIX, ADNOC_CAT, normCdf, normInv, nctCdf, nctInv, tInv, kFactor, briefScala, ros, ppcc, efUCL, aihaCategory, analyse, fmt, mean, sd };
+})();
+/*STATS-END*/
+
+</script>
+<script>
+'use strict';
+const F = OHStats.fmt;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const KEY = 'ohatrain.v1';
+let P = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } })();
+P.done = P.done || {}; P.q = P.q || {}; P.final = P.final || { answers: {} };
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) { } };
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 2600); }
+const why = (t, h) => `<details class="why"><summary>${t || 'Why it matters'}</summary><div class="prose">${h}</div></details>`;
+const hood = (t, h) => `<details class="hood"><summary>${t}</summary><div class="prose">${h}</div></details>`;
+const lab = (id, title, sub) => `<div class="lab"><div class="lab-head"><b>${title}</b><span>${sub || 'Interactive'}</span></div><div class="lab-body" data-lab="${id}"></div></div>`;
+const obj = list => `<div class="objectives"><b>By the end of this module you can</b><ul>${list.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+
+// ======================= MODULES =======================
+const MODS = [
+{ id: 'm0', n: 0, t: 'Foundations', s: 'What the app does and why', time: '10 min',
+  lede: 'OHA Studio carries an occupational hygiene engagement from scope to a signed report. This module explains the workflow, the principles behind it, and how a choice made early ripples through to the end.',
+  obj: ['Describe the seven workflow steps and what each produces', 'Explain why professional judgement stays with the hygienist', 'Trace how one early decision changes later results'],
+  body: () => `
+  <div class="sec prose"><h2>What OHA Studio is</h2>
+  <p>OHA Studio is a structured workbench for occupational hygiene consultants and in-house hygienists. It holds the data an assessment needs (areas, agents, exposure limits, similar exposure groups, samples, controls), runs validated exposure statistics, and produces a traceable report.</p>
+  <p>It runs entirely in your web browser. Nothing is sent to a server: your work lives in the browser's autosave and in the engagement file you save. The one exception is optional AI drafting, which you switch on with your own key.</p>
+  <h3>Three principles you will meet in every step</h3>
+  <ol><li><b>The hygienist decides.</b> The app suggests sort orders, calculates statistics and raises flags, but every rating, grouping, OEL choice, exclusion and final decision is made and recorded by a named person.</li>
+  <li><b>Everything is traceable.</b> Each edit is written to a hash-chained audit trail, and every number in the report comes from a stored value, never retyped.</li>
+  <li><b>Agree the rules first.</b> The decision standard is agreed with the client and locked before fieldwork, so results are judged by rules nobody can quietly change later.</li></ol></div>
+  <div class="sec"><h2>The workflow</h2><p class="prose" style="margin-top:0"><span style="font:16px/1.6 var(--serif)">Select each step to see what you do there and what it hands to the next step.</span></p>${lab('flow', 'Workflow map', 'Click a step')}</div>
+  <div class="sec prose"><h2>How decisions cascade</h2>
+  <p>Steps are not independent forms. A setting in step 0 changes numbers in step 4 and actions in step 5. Here is one real chain from the demo engagement:</p>
+  <div class="cascade"><span>Step 2: SEG works 12 h shifts</span><i>then</i><span>Brief &amp; Scala halves the 0.5 ppm TWA limit to 0.25 ppm</span><i>then</i><span>Step 4: X95 of 0.66 ppm is now 263% of the applied OEL</span><i>then</i><span>EN 689: non-compliance</span><i>then</i><span>Step 5: category 4 needs a source-control recommendation and 12-month reassessment</span></div>
+  <p>On an 8-hour shift, the same results would sit at 131% of the limit. Still over, but a different story for the client. You will run this chain yourself in Module 1.</p>
+  ${why('Why the app is built this way', '<p>Most disputes about hygiene reports come from three gaps: the rules for judging results were never agreed, the grouping of workers cannot be explained, or a number in the report cannot be traced to a sample. The workflow closes each gap at the point where it would otherwise open.</p>')}</div>`,
+  quiz: [
+    { id: 'm0q1', stem: 'Who makes the final exposure decision for a profile?', opts: ['The statistics engine, from the X95', 'The named hygienist, informed by the statistics', 'The client, after reading the report'], a: 1, why: 'The engine produces X95, UCLs and the EN 689 result, but the final category, outcome and rationale are recorded by a named hygienist in the Exposure step.' },
+    { id: 'm0q2', stem: 'Where is your engagement data stored?', opts: ['On the Risk2Safe server', 'In the browser autosave and the engagement file you save', 'In GitHub, with the app'], a: 1, why: 'There is no server. Data stays in local storage and in the .ohs.json file you save. Only optional AI drafting sends aggregated findings to your chosen provider.' },
+    { id: 'm0q3', stem: 'Why is the decision standard locked before fieldwork?', opts: ['To speed up the statistics', 'So results are judged by rules agreed in advance, not chosen after seeing the data', 'Because the app cannot change it afterwards'], a: 1, why: 'Locking records the agreed rules, who agreed them and when. It can be unlocked, but only with a recorded reason, which appears in the audit trail.' }] },
+
+{ id: 'm1', n: 1, t: 'Engagement', s: 'App step 0: scope and rules', time: '15 min',
+  lede: 'Step 0 defines what the assessment covers and how its results will be judged. It is the step most often rushed, and the one that causes most arguments at report stage.',
+  obj: ['Choose the right engagement type and record scope exclusions', 'Explain each decision standard setting and its downstream effect', 'Use the data request register and kick-off record'],
+  body: () => `
+  <div class="sec prose"><h2>Engagement details</h2>
+  <p>Record the client, site, country, engagement type, fieldwork dates, lead consultant and <b>principal hygienist</b>. The principal must be named before you can lock the decision standard or sign the report.</p>
+  <ul><li><b>Baseline OHA:</b> the first full characterisation of all agents and SEGs.</li><li><b>Compliance verification:</b> showing conformance with a regulator or company standard.</li><li><b>Targeted investigation:</b> triggered by a complaint, a health finding or an incident. Record the trigger; it is required.</li></ul>
+  <h3>Scope</h3><p>Tick the facilities, workforce groups and seasons in scope. Anything you leave out appears automatically in the report's <b>Limitations</b>, with your justification.</p>
+  ${why('Why contractors and summer get flagged', '<p>Turnaround and maintenance contractors carry out the highest-exposure tasks (vessel entry, blasting, catalyst handling) and are the least characterised group, so excluding them from a baseline assessment raises a QA flag. In a hot climate, a winter-only survey understates both heat stress and volatile chemical exposure, so a hot climate without summer in scope is flagged too.</p>')}</div>
+  <div class="sec prose"><h2>The decision standard</h2>
+  <div class="tw"><table class="t"><thead><tr><th>Setting</th><th>What it controls</th></tr></thead><tbody>
+  <tr><td>Assessment framework</td><td>Generic (AIHA / EN 689) or ADNOC HSE-OH-ST03. Changes the OHRA screens, matrix and report.</td></tr>
+  <tr><td>OEL selection rule</td><td>How one limit is picked when the library holds several: most protective, legal first, or a specified source priority.</td></tr>
+  <tr><td>Statistical decision</td><td>Which results lead the report: AIHA categories, the EN 689 test, both, or ADNOC UCL banding.</td></tr>
+  <tr><td>AIHA confidence level</td><td>Default 0.95. Sets the upper confidence limit on X95 and the exceedance fraction.</td></tr>
+  <tr><td>EN 689 confidence level</td><td>0.70, as EN 689 specifies for its statistical test.</td></tr>
+  <tr><td>Shift adjustment</td><td>Brief &amp; Scala adjusts TWA limits for each SEG's shift length; or none.</td></tr>
+  <tr><td>Minimum samples</td><td>Default 6. Fewer results are flagged and EN 689 gives only a preliminary result.</td></tr></tbody></table></div>
+  <p>Select <b>Lock decision standard</b> once the client agrees. To change it later, use <b>Unlock with reason</b>; the reason goes into the audit trail.</p></div>
+  <div class="sec"><h2>Try it: how the decision standard changes results</h2><p style="font:16px/1.6 var(--serif);margin-top:0">Eight benzene results for condensate field operators on 12-hour shifts, against a 0.5 ppm TWA limit. Change the settings and watch the outputs.</p>${lab('confidence', 'Decision standard simulator', 'Uses the app\'s statistics engine')}</div>
+  <div class="sec prose"><h2>Data request register and kick-off</h2>
+  <p>Track every document asked of the client as Requested, Received, Reviewed or Not available. <b>Add sour gas plant request list</b> inserts ten standard items, starting with PFDs and stream compositions, which a hygienist can use to predict most chemical exposures before walking the site.</p>
+  <p>At the kick-off meeting, record attendees, access and permit arrangements and the H₂S protocol. List the <b>non-routine tasks</b> due during the survey window (vessel opening, catalyst change-out, blasting). They become non-routine tasks in OHID, so sampling can be planned around them.</p></div>`,
+  quiz: [
+    { id: 'm1q1', scen: 'Your client asks you to leave the turnaround contractors out of a baseline OHA because "contractors are the contractor\'s responsibility".', stem: 'What happens in OHA Studio if you untick Contractors?', opts: ['Nothing; it is just a label', 'A QA flag is raised and the exclusion appears in the report limitations', 'The app blocks the engagement'], a: 1, why: 'Excluding contractors from a baseline OHA raises a flag and lists the exclusion as a limitation. Raising it with the client, technically and contractually, is your job; the app makes the gap visible.' },
+    { id: 'm1q2', stem: 'Raising the AIHA confidence level from 0.90 to 0.95, with the same data, will...', opts: ['Lower the X95 UCL', 'Raise the X95 UCL, possibly moving the category up', 'Change the geometric mean'], a: 1, why: 'Higher confidence means a larger tolerance factor, so the upper confidence limit rises. The GM and X95 point estimate do not change.' },
+    { id: 'm1q3', stem: 'What must be recorded before you can lock the decision standard?', opts: ['The fieldwork dates', 'The principal hygienist', 'At least one SEG'], a: 1, why: 'The lock records who agreed the standard, so the principal hygienist must be named on the Engagement step first.' }] },
+
+{ id: 'm2', n: 2, t: 'OHID', s: 'App step 1: initial diagnostic', time: '15 min',
+  lede: 'OHID builds the map of areas, sources, agents, limits, tasks and equipment that every later step depends on. Most of it is desk review before you set foot on site.',
+  obj: ['Record areas with their hazardous-area zone', 'Set agent sub-categories and build the OEL library', 'Check sampling equipment and laboratories before mobilising'],
+  body: () => `
+  <div class="sec prose"><h2>Areas and agents</h2>
+  <p>Add each <b>assessment unit</b> with its hazardous-area zone (non-hazardous, Zone 2, Zone 1, Zone 0). The zone is later checked against the Ex rating of every sampling pump used there. Mark areas visited; an unvisited area needs a reason, or it appears as a limitation.</p>
+  <p>Each <b>agent</b> has a class and a <b>hazard sub-category</b>: acute toxic gas, chronic chemical, particulate, physical agent, biological, ergonomic or psychosocial. The sub-category sets the default averaging time of new exposure profiles: peak or STEL for acute toxic gases, full-shift TWA for the rest. <b>Add sour gas hazard library</b> inserts 18 typical agents with CAS numbers, but no limits.</p>
+  ${hood('Under the hood: why sub-category drives averaging time', '<p>H₂S, SO₂ and CO harm through short peaks. An 8-hour average of a monitor that recorded several 15 ppm spikes can look compliant while missing the acute risk. Defaulting acute toxic gases to STEL or peak monitoring stops the most common sour-gas mistake: TWA-only H₂S monitoring.</p>')}</div>
+  <div class="sec prose"><h2>OEL library</h2>
+  <p>No exposure limits ship with the app. Enter each limit with its source, jurisdiction, value, unit, averaging time, legal status, effective date and citation. Several limits per agent are normal; the decision standard picks one per profile. ACGIH TLVs are copyrighted, so enter them only under your firm's licence.</p></div>
+  <div class="sec prose"><h2>Tasks, screening and immediate concerns</h2>
+  <p>Record tasks by what workers actually do, how often and for how long, with PPE worn and controls used. Record screening readings with the instrument and tick <b>Bump / cal OK</b> only if it passed that day. Record any obvious uncontrolled exposure as an <b>immediate concern</b> and notify the client; you do not need data to act on dry sweeping of sulphur dust.</p></div>
+  <div class="sec"><h2>Try it: pre-mobilisation equipment check</h2><p style="font:16px/1.6 var(--serif);margin-top:0">Survey date 10 July 2026. Decide whether each planned sample can go ahead.</p>${lab('premob', 'Equipment and zone check', 'Classify each sample')}</div>`,
+  quiz: [
+    { id: 'm2q1', stem: 'You add carbon monoxide as an acute toxic gas, then create a profile for it. Which averaging time does the app propose?', opts: ['TWA (full shift)', 'STEL (15 min)', 'Ceiling'], a: 1, why: 'Acute toxic gases default to STEL; you can change it, for example to peak (logged).' },
+    { id: 'm2q2', stem: 'A pump certified for Zone 2 is used in a Zone 1 area. In QA checks this is...', opts: ['Information only', 'A flag to acknowledge', 'A blocking item'], a: 2, why: 'Equipment not certified for the zone of the area sampled is a blocking item: the sample cannot support the report.' },
+    { id: 'm2q3', stem: 'Why does the app ship with no OEL values?', opts: ['Limits never change', 'Some are licensed (e.g. ACGIH) and all change over time; you enter entitled, cited values', 'The app looks them up online'], a: 1, why: 'Each engagement holds its own cited OEL library from sources you are entitled to use.' }] },
+
+{ id: 'm3', n: 3, t: 'SEGs', s: 'App step 2: exposure groups', time: '15 min',
+  lede: 'A similar exposure group is a set of workers expected to share one exposure profile. Get the grouping right and a few samples describe many people; get it wrong and no statistic will save the assessment.',
+  obj: ['Form SEGs by task and environment, not job title', 'Explain how shift length adjusts the OEL', 'Read the SEG validation flags'],
+  body: () => `
+  <div class="sec prose"><h2>Building the register</h2>
+  <p>Each SEG needs a <b>definition</b>, a <b>grouping rationale</b> and a <b>shift length</b>; missing any of them raises a flag. Record headcounts for own staff and contractors, the rotation, and the tasks with frequency and duration. The principal hygienist approves each SEG (status Draft to Approved).</p>
+  <p>Group by process, task, agent and environment. Two people with the same job title can belong to different SEGs if one spends this rotation in the control room.</p></div>
+  <div class="sec"><h2>Try it: group the workers</h2>${lab('segsort', 'SEG assignment', 'Assign, then check')}</div>
+  <div class="sec prose"><h2>Shift length and the OEL</h2>
+  <p>Exposure limits assume 8-hour days. Longer shifts mean more exposure and less recovery time, so the app applies the <b>Brief &amp; Scala</b> reduction factor to TWA limits, using each SEG's own shift length:</p>
+  <p style="text-align:center;font-family:var(--sans);font-weight:600">RF = (8 ÷ h) × ((24 − h) ÷ 16)</p>
+  ${lab('shift', 'Shift adjustment calculator', 'Drag the slider')}
+  <p>STEL and ceiling limits are never adjusted, because they already describe short periods.</p></div>
+  <div class="sec prose"><h2>Validation against data</h2>
+  <p>Once a profile has results, the SEGs step tests the grouping: a <b>GSD above 3</b>, a <b>lognormal fit below r = 0.90</b>, or a <b>worker whose geometric mean exceeds twice the SEG's</b> each flag the group for review. A flag is a prompt, not a verdict: split the SEG (by task, area, shift or season) or keep it and record why.</p></div>`,
+  quiz: [
+    { id: 'm3q1', stem: 'An SEG works 10-hour shifts and the TWA OEL is 1 ppm. With Brief & Scala, the applied OEL is...', opts: ['1 ppm', '0.7 ppm', '0.5 ppm'], a: 1, why: 'RF = (8/10) × (14/16) = 0.7, so 0.7 ppm.' },
+    { id: 'm3q2', stem: 'A profile shows GSD 3.8 and one worker at three times the SEG geometric mean. What should you do?', opts: ['Exclude that worker\'s samples', 'Review the grouping: split by task or area, or keep it with a recorded reason', 'Increase the confidence level'], a: 1, why: 'High variability and an outlying individual suggest a mixed group. Excluding real exposures to tidy the statistics is not acceptable; exclusions are for invalid samples.' },
+    { id: 'm3q3', stem: 'Why is shift length recorded on the SEG and not just on the site?', opts: ['For the report cover', 'Groups on different rotations at one site need different OEL adjustments', 'It is not used'], a: 1, why: 'A 12-hour contractor group and an 8-hour day group at the same plant must be judged against different applied limits.' }] },
+
+{ id: 'm4', n: 4, t: 'OHRA', s: 'App step 3: rating and priorities', time: '15 min',
+  lede: 'OHRA rates every SEG × agent combination before sampling, so the sampling budget goes where uncertainty and potential harm are greatest. This module covers the generic method; Module 9 covers ADNOC.',
+  obj: ['Rate exposure, health effect and confidence for a profile', 'Predict the suggested work list', 'Build a monitoring plan'],
+  body: () => `
+  <div class="sec prose"><h2>Exposure profiles</h2>
+  <p>A profile is one SEG, one agent and one averaging time. Add them one at a time, or use <b>Create profiles for every SEG × agent pair</b> and delete those that do not apply.</p>
+  <div class="tw"><table class="t"><thead><tr><th>Rating</th><th>Scale</th></tr></thead><tbody>
+  <tr><td>Exposure rating</td><td>0: X95 ≤ 1% of OEL · 1: ≤ 10% · 2: ≤ 50% · 3: ≤ 100% · 4: above 100%</td></tr>
+  <tr><td>Health effect</td><td>1 to 4</td></tr>
+  <tr><td>Confidence</td><td>High, medium or low; plus the basis (measured, surrogate, modelling, judgement)</td></tr>
+  <tr><td>Act now</td><td>Tick for an obvious uncontrolled exposure</td></tr></tbody></table></div>
+  <h3>Suggested work lists</h3>
+  <ul><li><b>Act now</b> if Act now is ticked.</li><li><b>Sample</b> if exposure rating is 3 or 4, or health effect is 3 or 4 with exposure rating 2 or more or low confidence.</li><li><b>Confirm</b> if exposure rating is 0 or 1 with medium or high confidence.</li><li>Anything else rated: <b>Sample</b>.</li></ul>
+  ${why('Why low confidence pushes a profile up the list', '<p>An exposure you cannot estimate with confidence, for an agent that can cause serious harm, is exactly where a few samples buy the most certainty. Uncertainty is itself a reason to sample.</p>')}</div>
+  <div class="sec"><h2>Try it: rate four profiles</h2>${lab('rate', 'OHRA rating practice', 'Set ratings, then check')}</div>
+  <div class="sec prose"><h2>Risk matrix and monitoring plan</h2>
+  <p>Profiles are placed on a health effect × exposure grid; score 12 or more is high, 6–11 medium, 3–5 low. Then, for each profile, set the <b>method</b> (e.g. NIOSH 1501), the <b>number of samples</b> (usually 6–10), the <b>timing</b> (include summer and non-routine tasks), any <b>pinned OEL</b> with a reason, and the <b>health surveillance link</b>.</p></div>`,
+  quiz: [
+    { id: 'm4q1', stem: 'Exposure rating 1, health effect 4, confidence low, not Act now. Suggested list?', opts: ['Confirm', 'Sample', 'Act now'], a: 1, why: 'Health effect 3 or 4 with low confidence goes to Sample.' },
+    { id: 'm4q2', stem: 'Operators are dry-sweeping visible sulphur dust without RPE. What do you do in OHRA?', opts: ['Rate it and wait for sample results', 'Tick Act now and issue an interim recommendation', 'Leave it out until the walk-through report'], a: 1, why: 'An obvious uncontrolled exposure does not need data. Act now puts it at the top and prompts an interim action.' },
+    { id: 'm4q3', stem: 'Is the suggested list a decision?', opts: ['Yes, the app decides', 'No, it is a sort order the hygienist can follow or override', 'Only for Act now items'], a: 1, why: 'Suggestions order the work; the hygienist decides what to sample.' }] },
+
+{ id: 'm5', n: 5, t: 'Exposure', s: 'App step 4: samples and statistics', time: '25 min',
+  lede: 'This is where measurements become conclusions. You enter results, the engine runs the statistics, and you record a decision with your reasons.',
+  obj: ['Enter samples correctly, including non-detects and blanks', 'Interpret GM, GSD, X95, UCLs, exceedance fraction and EN 689', 'Explain how non-detects are handled', 'Record a defensible decision'],
+  body: () => `
+  <div class="sec prose"><h2>Entering samples</h2>
+  <p>Select a profile, then add samples in the unit of the <b>applied OEL</b> shown in the header. Key rules:</p>
+  <ul><li><b>Non-detects:</b> enter the LOD as the result and tick <b>ND</b>. An ND without a value is a blocking item.</li>
+  <li><b>Flow:</b> record pre- and post-sample flow. Drift above 5% is flagged.</li>
+  <li><b>Duration:</b> a full-shift TWA covering less than 70% of the SEG's shift is flagged.</li>
+  <li><b>Blanks:</b> tick Field blank; blanks are kept out of the statistics. Aim for 10% of samples, at least 2. A blank above the LOD flags the batch.</li>
+  <li><b>Area samples:</b> set Type to Area. They show background levels only and are excluded from compliance statistics.</li>
+  <li><b>Acute toxic gases:</b> tick <b>Datalog verified</b>. A personal alarm monitor is not an exposure monitor unless logging was on and downloaded; without it the result is blocked.</li>
+  <li><b>Exclusions:</b> tick Exclude only for invalid samples, and give the reason.</li></ul>
+  <p>Lab results can be imported from a CSV with columns <b>coc, value, nd</b>, matched to sample IDs you have already created.</p></div>
+  <div class="sec prose"><h2>What the statistics mean</h2>
+  <div class="tw"><table class="t"><thead><tr><th>Output</th><th>Meaning</th></tr></thead><tbody>
+  <tr><td>GM, GSD</td><td>Centre and spread of a lognormal distribution. GSD above 3 suggests a mixed group.</td></tr>
+  <tr><td>X95</td><td>The 95th percentile: 1 shift in 20 is expected to exceed it.</td></tr>
+  <tr><td>X95 UCL</td><td>Upper confidence limit on X95 at the AIHA confidence level. Small samples give wide limits.</td></tr>
+  <tr><td>Exceedance fraction</td><td>Estimated share of shifts above the OEL, with its UCL.</td></tr>
+  <tr><td>AM UCL95</td><td>Upper confidence limit of the arithmetic mean, for chronic effects (and the ADNOC "95% UCL").</td></tr>
+  <tr><td>AIHA category</td><td>0–4 from X95 relative to the OEL, and from its UCL.</td></tr>
+  <tr><td>EN 689</td><td>3–5 results: preliminary test (all below 0.1, 0.15 or 0.2 × OEL). 6 or more: statistical test (UTL 70%, 95% below the OEL).</td></tr></tbody></table></div>
+  ${hood('Under the hood: how non-detects are handled', '<p>Replacing every non-detect with LOD/2 distorts the spread, especially when many results are censored. The app uses <b>robust regression on order statistics (ROS)</b>: it fits a lognormal line through the detected values on a probability plot, then imputes values for the non-detects from that line, below their detection limits. Multiple detection limits are handled.</p><p>ROS needs at least 3 detects and no more than 80% non-detects. Outside that, the app falls back to LOD/√2 substitution and labels it clearly, and more than 50% non-detects raises a flag either way.</p>')}
+  ${hood('Under the hood: confidence limits', '<p>Tolerance factors for the X95 UCL and the EN 689 test come from the exact noncentral t distribution and match published tables (2.187 for EN 689 at n = 6). The arithmetic-mean UCL uses a generalized confidence interval, which simulation shows gives the intended 95% coverage; it approximates the Land method IHSTAT uses.</p>')}</div>
+  <div class="sec"><h2>Try it: the statistics lab</h2><p style="font:16px/1.6 var(--serif);margin-top:0">Load a dataset or type your own. Tick ND to make a result a non-detect. The panel compares ROS with LOD/2 substitution so you can see why it matters.</p>${lab('statlab', 'Statistics lab', 'Live engine')}</div>
+  <div class="sec prose"><h2>Reading the plot and recording the decision</h2>
+  <p>On the log-probability plot, filled points are measured results and hollow points are imputed non-detects. A straight line suggests one population; a bend or a step suggests two groups mixed together.</p>
+  <p>Finally, choose the <b>final category</b> (0–4) and <b>outcome</b>, write the <b>rationale</b>, and select <b>Record decision</b>. The audit trail stores your decision with the X95, the EN 689 result and the engine version at that moment, so anyone can later see what you knew when you decided.</p></div>`,
+  quiz: [
+    { id: 'm5q1', stem: 'How do you enter a mercury result reported as "< 0.5 µg/m³"?', opts: ['Enter 0 and tick ND', 'Enter 0.5 and tick ND', 'Enter 0.25 (LOD/2)'], a: 1, why: 'Enter the LOD as the result and tick ND. The app then handles it by ROS or labelled substitution.' },
+    { id: 'm5q2', stem: 'A profile has 2 detects and 6 non-detects. How are the non-detects treated?', opts: ['Robust ROS', 'LOD/√2 substitution, labelled as a fallback', 'They are deleted'], a: 1, why: 'ROS needs at least 3 detects and no more than 80% censoring; here there are only 2 detects, so substitution is used and labelled.' },
+    { id: 'm5q3', stem: 'Five results all below 0.2 × OEL. EN 689 says...', opts: ['Compliance (preliminary test)', 'No decision: need 6 for any result', 'Non-compliance'], a: 0, why: 'With 5 results, EN 689 allows a preliminary compliance decision when all are below 0.2 × OEL.' },
+    { id: 'm5q4', stem: 'A fixed-area H₂S monitor near the sulphur pit recorded high values. Can you use it to show compliance for SRU operators?', opts: ['Yes, set Type to Personal', 'No: area samples show background levels and are excluded from compliance statistics', 'Yes, if datalogged'], a: 1, why: 'Compliance is judged on personal breathing-zone samples. Area samples help find sources, not judge exposure.' }] },
+
+{ id: 'm6', n: 6, t: 'Controls', s: 'App step 5: controls and actions', time: '15 min',
+  lede: 'Step 5 checks whether existing controls work, whether the RPE people wear is good enough, and turns findings into recommendations, a reassessment schedule and a handover.',
+  obj: ['Record control evidence at the right verification level', 'Calculate RPE adequacy', 'Write recommendations that pass QA', 'Use MOC and close-out exports'],
+  body: () => `
+  <div class="sec prose"><h2>Existing controls</h2>
+  <p>Record each control at its hierarchy level with its evidence. Verification has three levels: <b>Tested</b> (measured performance such as LEV capture velocity), <b>Inspected only</b> and <b>Not verified</b>. An inspection record does not prove an extraction hood captures anything.</p></div>
+  <div class="sec prose"><h2>RPE adequacy</h2>
+  <p>For each profile with statistics, the app calculates the <b>required protection factor</b> = X95 UCL ÷ applied OEL and compares it with the <b>assigned protection factor</b> you enter for the RPE in use.</p>
+  ${lab('rpe', 'RPE adequacy calculator', 'Change the inputs')}
+  ${why('Why "adequate" on paper is not the end', '<p>An APF assumes a fitted, maintained respirator worn correctly. Check fit-test records, the facial-hair policy, and whether airline or SCBA systems are suitable for hot conditions before relying on the result.</p>')}</div>
+  <div class="sec prose"><h2>Recommendations</h2>
+  <p>Write each recommendation so someone can verify it was done: "Install closed-loop sampling at SP-3 and SP-4", not "reduce exposure". Every category 3–4 profile needs at least one linked recommendation, and a profile with <b>only PPE recommendations</b> is flagged until you record why source controls are not proposed. Export the register as CSV for the client's action tracker.</p>
+  <p>The default reassessment interval follows the final category: <b>12 months</b> for categories 3–4, <b>24</b> for category 2 and <b>36</b> for categories 0–1. You can override it per profile.</p></div>
+  <div class="sec prose"><h2>MOC and handover</h2>
+  <p>Add an MOC event when a new chemical, process change, task or equipment arrives. While it is open, every profile with the same agent or SEG shows <b>Review required</b>. At close-out, record the handover and export the <b>exposure-database package</b> (JSON) and the SEG register and results (CSV) for the client's in-house hygienist.</p></div>`,
+  quiz: [
+    { id: 'm6q1', stem: 'X95 UCL 2.0 ppm, applied OEL 0.25 ppm, half-mask with APF 10. Adequate?', opts: ['Adequate on paper: required PF 8 is within APF 10; confirm fit-testing and correct use', 'Inadequate: required PF 8 exceeds APF 10', 'Cannot tell without the GSD'], a: 0, why: 'Required PF = 2.0 / 0.25 = 8, which APF 10 covers. Adequacy also depends on fit-testing and correct use.' },
+    { id: 'm6q2', stem: 'A category 4 benzene profile has one recommendation: "wear RPE". What does QA do?', opts: ['Nothing', 'Flags it: PPE-only for a category 3–4 profile needs a reason', 'Blocks the report'], a: 1, why: 'It is a flag. Either add a source control (e.g. closed-loop sampling) or record why none is proposed.' },
+    { id: 'm6q3', stem: 'A new corrosion inhibitor is introduced at the condensate tanks. What do you record?', opts: ['A new SEG', 'An MOC event against the affected agent or SEG', 'Nothing until the next survey'], a: 1, why: 'An open MOC marks the affected profiles Review required, so the change cannot be missed.' }] },
+
+{ id: 'm7', n: 7, t: 'Report and QA', s: 'App step 6: QA, report, sign-off', time: '20 min',
+  lede: 'Before a report can be signed, every blocking item must be fixed and every flag acknowledged. Signing then freezes a fingerprint of the data, so the issued report can always be proved against what was signed.',
+  obj: ['Tell blocking items, flags and information items apart', 'Generate the report in its output formats', 'Explain what the sign-off snapshot captures'],
+  body: () => `
+  <div class="sec prose"><h2>QA checks</h2>
+  <div class="tw"><table class="t"><thead><tr><th>Level</th><th>Meaning</th><th>Examples</th></tr></thead><tbody>
+  <tr><td><span class="pill crit">Block</span></td><td>Must be fixed. Sign-off is impossible while any remain.</td><td>ND without an LOD; equipment past calibration; equipment not Ex-certified for the zone; acute toxic gas result without verified datalogging</td></tr>
+  <tr><td><span class="pill warn">Flag</span></td><td>Can proceed once acknowledged with a note, which may appear in the report limitations.</td><td>Flow drift over 5%; too few samples; GSD above 3; decision standard not locked; PPE-only recommendations</td></tr>
+  <tr><td><span class="pill info">Info</span></td><td>For awareness only.</td><td>SEG not yet approved; area not visited</td></tr></tbody></table></div>
+  ${why('Why blocks and flags differ', '<p>A block means the data cannot honestly support the conclusion: an uncalibrated pump\'s result is not a measurement. A flag means a professional can reasonably proceed if they explain why, for example only 5 samples because the turnaround ended early. Acknowledging a flag puts your explanation on record.</p>')}</div>
+  <div class="sec"><h2>Try it: triage QA items</h2>${lab('qa', 'QA triage', 'Classify, then check')}</div>
+  <div class="sec prose"><h2>Generating the report</h2>
+  <p>Fill in the title, reference, revision, executive summary and conclusions, then select <b>Generate preview</b>. Sections run from executive summary, scope, methodology and limitations to results by SEG and agent, controls, recommendations, monitoring programme and health surveillance, with sample data in the appendix. Output as <b>Print / save as PDF</b>, <b>Word (.doc)</b> or <b>HTML</b>.</p></div>
+  <div class="sec prose"><h2>Sign-off and the snapshot</h2>
+  <p><b>Sign and freeze snapshot</b> is available when there are no blocks, every flag is acknowledged and the principal hygienist is named. It records your name, credentials, the time, and a <b>SHA-256 hash</b> of the whole engagement (everything except the audit trail and the sign-off record itself). The hash is printed on the report.</p>
+  <p>Change anything afterwards and the sign-off is withdrawn automatically, because the data no longer matches the signed fingerprint. <b>Withdraw sign-off</b> does the same deliberately and advances the revision letter.</p>
+  ${lab('snap', 'Snapshot and audit chain demo', 'Sign, edit, tamper')}</div>`,
+  quiz: [
+    { id: 'm7q1', stem: 'You signed the report, then corrected a typo in an SEG name. What is the sign-off status?', opts: ['Still signed', 'Withdrawn: the data no longer matches the snapshot', 'Signed, with a warning'], a: 1, why: 'Any data change after signing withdraws the sign-off. Re-run QA and sign again as a new revision.' },
+    { id: 'm7q2', stem: 'Which of these blocks sign-off?', opts: ['An unacknowledged flag', 'Only blocking items', 'Both blocking items and unacknowledged flags'], a: 2, why: 'Sign-off needs zero blocking items and every flag acknowledged, plus a named principal hygienist.' },
+    { id: 'm7q3', stem: 'What does the audit trail\'s hash chain do?', opts: ['Prevents anyone editing past entries', 'Makes any edit to past entries detectable', 'Encrypts the file'], a: 1, why: 'Each entry hashes the previous one, so editing any entry breaks every hash after it. It detects tampering; it does not prevent it.' }] },
+
+{ id: 'm8', n: 8, t: 'Overview and Settings', s: 'Overview, QA checks, Settings', time: '10 min',
+  lede: 'Three screens sit outside the numbered steps: the Overview dashboard, the QA checks list and Settings. They are where you check progress, clear issues and protect your work.',
+  obj: ['Read the Overview dashboard and rail progress', 'Save, encrypt and reopen engagement files', 'Verify the audit chain'],
+  body: () => `
+  <div class="sec prose"><h2>Overview</h2>
+  <p>The Overview shows counts of SEGs, profiles, samples and open recommendations, the number of QA items still to clear, the spread of <b>final exposure categories</b>, the <b>suggested work lists</b> and a list of <b>next steps</b>. In the left rail, an outlined circle means a step has started and a filled one means it is complete. The QA checks link shows a red count of blocking items and an amber count of open flags.</p></div>
+  <div class="sec prose"><h2>Settings and audit</h2>
+  <ul><li><b>Your name and credentials:</b> stamped on every audit entry and decision. Set this first.</li>
+  <li><b>AI drafting:</b> provider, model and your API key (see Module 9).</li>
+  <li><b>Save file</b> downloads the engagement as <b>.ohs.json</b>, the system of record. <b>Save encrypted file</b> uses AES-256-GCM with a passphrase of 12 or more characters; there is no recovery if you lose it. <b>Open file</b> loads a file and verifies its audit chain.</li>
+  <li><b>Audit trail:</b> every edit with time, user and change. <b>Verify chain</b> checks it has not been altered.</li></ul>
+  ${why('Why the file, not the browser, is the record', '<p>The browser autosave protects against a closed tab, but clearing browser data deletes it, and it holds only one engagement. Save to file at the end of every session, keep the file in controlled storage, and encrypt it whenever it leaves your device. ADNOC, for example, requires OHRA records to be kept for 40 years.</p>')}</div>`,
+  quiz: [
+    { id: 'm8q1', stem: 'You need to email an engagement file to a colleague. What should you use?', opts: ['Save file', 'Save encrypted file, and share the passphrase separately', 'Copy the browser autosave'], a: 1, why: 'Encrypt any file that leaves your device, and send the passphrase by a different channel.' },
+    { id: 'm8q2', stem: 'What does the red number next to QA checks mean?', opts: ['Open flags', 'Blocking items', 'Information items'], a: 1, why: 'Red counts blocking items; amber counts flags not yet acknowledged.' }] },
+
+{ id: 'm9', n: 9, t: 'Optional features', s: 'ADNOC framework, AI drafting', time: '20 min',
+  lede: 'Two options extend the core workflow: the ADNOC HSE-OH-ST03 framework for work in the ADNOC Group, and AI drafting of the executive summary.',
+  obj: ['Switch on the ADNOC framework and know what it changes', 'Rate a hazard on the 6 × 6 matrix and band a 95% UCL', 'Use AI drafting safely'],
+  body: () => `
+  <div class="sec prose"><h2>ADNOC HSE-OH-ST03 (OHRM)</h2>
+  <p>Select <b>Apply ADNOC HSE-OH-ST03 preset</b> on the Engagement step. It sets the ADNOC framework, the OEL hierarchy (Cabinet Decree 12/2006 via HSE-OH-ST02, then EH40, OSHA, NIOSH, ACGIH), 95% UCL banding on the arithmetic-mean UCL, and Brief &amp; Scala adjustment.</p>
+  <ul><li><b>OHID set-up:</b> project phase, Generic or Specific approach, workshop, assessment team with an Appendix 4 competency check, clause 7(e) activity coverage and the Appendix 6 checklist.</li>
+  <li><b>Stage 1 (qualitative):</b> severity 1–6 rated on the health effect alone; likelihood A–F taking account of existing controls; the health risk rating comes from the 6 × 6 matrix. Severity 3 or above, or a Medium rating, requires quantitative assessment or a recorded justification.</li>
+  <li><b>Stage 2 (quantitative):</b> the 95% UCL as a percentage of the OEL sets likelihood and survey frequency. A UCL above 50% of the OEL puts the SEG in the Health Surveillance Plan; Medium risk or above with a BMGV/BEI triggers biological monitoring.</li>
+  <li><b>Outputs:</b> Remedial Action Plan with EOH, HSE Manager and Facility Manager approvals; Appendix 5 risk register; Appendix 7 compliance list.</li></ul></div>
+  <div class="sec"><h2>Try it: the ADNOC matrix and UCL bands</h2>${lab('adnoc', 'ADNOC rating calculator', 'Click a cell, move the slider')}</div>
+  <div class="sec prose"><h2>AI-drafted executive summary</h2>
+  <p>In Settings, choose Anthropic or OpenAI, enter the model and your own API key. On the Report step, <b>Draft summary with AI</b> sends aggregated findings (profile labels, statistics, decisions, recommendations, open concerns) directly from your browser to the provider. Worker pseudonyms and individual sample records are not sent.</p>
+  <p>The draft is marked as AI-generated in the app, and the report states that AI assistance was used. Review and edit it: the AI drafts, you remain responsible for every word issued. Check client contracts first; some prohibit sending engagement data to third parties.</p></div>`,
+  quiz: [
+    { id: 'm9q1', stem: 'Under HSE-OH-ST03, severity is rated...', opts: ['After taking account of existing controls', 'On the health effect alone, ignoring controls', 'From sample results'], a: 1, why: 'Severity reflects the health effect only; likelihood is where controls count.' },
+    { id: 'm9q2', stem: 'Severity 4, likelihood D. Health risk rating?', opts: ['Medium', 'High-Medium', 'High'], a: 2, why: '4D is red on the Appendix 9 matrix: High / Category 1.' },
+    { id: 'm9q3', stem: 'The AM 95% UCL is 60% of the OEL. Survey frequency and HSP?', opts: ['Every 3 years; no HSP', 'Annual; SEG included in the Health Surveillance Plan', 'Every 4 years; HSP'], a: 1, why: '50–100% of the OEL means annual surveys, and a UCL above 50% of the OEL triggers HSP inclusion.' },
+    { id: 'm9q4', stem: 'What does AI drafting send to the provider?', opts: ['The whole engagement file', 'Aggregated findings, without worker identities', 'Nothing; it runs offline'], a: 1, why: 'Only structured, aggregated findings are sent, directly from your browser.' }] },
+];
+
+const FINAL = [
+  { id: 'f1', scen: 'You are starting a baseline OHA at a gas plant in a hot climate. The client wants a February survey only.', stem: 'What does OHA Studio do if summer is left out of scope?', opts: ['Blocks the engagement', 'Raises a QA flag and lists the gap as a limitation', 'Nothing'], a: 1 },
+  { id: 'f2', scen: 'The client asks to change the OEL selection rule after you have presented results.', stem: 'What is the correct way to do this in the app?', opts: ['Edit the locked field directly', 'Unlock with a recorded reason and seek client re-approval', 'Create a new engagement'], a: 1 },
+  { id: 'f3', scen: 'A survey pump certified for Zone 2 was used in a Zone 1 condensate area.', stem: 'What does QA report?', opts: ['A flag', 'A blocking item', 'Information'], a: 1 },
+  { id: 'f4', scen: 'Contractor fitters work 12-hour shifts; the TWA OEL is 25 µg/m³.', stem: 'With Brief & Scala, the applied OEL is...', opts: ['25 µg/m³', '17.5 µg/m³', '12.5 µg/m³'], a: 2 },
+  { id: 'f5', scen: 'A profile has a GSD of 4.1 and a lognormal fit r of 0.84.', stem: 'The most appropriate response is...', opts: ['Exclude the highest results', 'Review the grouping and consider splitting the SEG', 'Lower the confidence level'], a: 1 },
+  { id: 'f6', scen: 'Control room operators: H₂S, health effect 4, exposure rating 1, confidence high, building positively pressurised.', stem: 'Suggested list?', opts: ['Sample', 'Confirm', 'Act now'], a: 1 },
+  { id: 'f7', scen: 'A lab reports a benzene result as "< 0.02 ppm".', stem: 'How do you enter it?', opts: ['0.02 with ND ticked', '0 with ND ticked', '0.01'], a: 0 },
+  { id: 'f8', scen: 'Eight results include 5 non-detects and 3 detects.', stem: 'Which non-detect method does the app use?', opts: ['Robust ROS', 'LOD/√2 substitution', 'Deletion of non-detects'], a: 0 },
+  { id: 'f9', scen: 'An H₂S STEL result comes from a personal alarm monitor whose log was not downloaded.', stem: 'In QA this is...', opts: ['Fine if the alarm did not sound', 'A blocking item until datalogging is verified, or the sample is excluded', 'A flag'], a: 1 },
+  { id: 'f10', scen: 'X95 UCL 3.0 mg/m³; applied OEL 0.5 mg/m³; workers wear half-masks, APF 10.', stem: 'RPE adequacy?', opts: ['Inadequate: required PF 6 exceeds APF 10', 'Adequate on paper: required PF 6 is within APF 10; verify fit-testing', 'Cannot be calculated'], a: 1 },
+  { id: 'f11', scen: 'After signing, you fix a spelling error in a recommendation.', stem: 'What happens?', opts: ['Nothing; spelling is not data', 'The sign-off is withdrawn; issue a new revision', 'The hash updates and stays signed'], a: 1 },
+  { id: 'f12', scen: 'ADNOC framework: severity 3, likelihood D.', stem: 'Health risk rating?', opts: ['Medium / Category 3', 'High-Medium / Category 2', 'High / Category 1'], a: 1 },
+  { id: 'f13', scen: 'ADNOC framework: severity 2 (minor) hazard rated qualitative likelihood B.', stem: 'Is quantitative assessment required?', opts: ['Yes, always', 'No: severity below 3 and the rating is Low', 'Only if the client asks'], a: 1 },
+  { id: 'f14', scen: 'You want an AI-drafted executive summary.', stem: 'Which statement is correct?', opts: ['The draft can be issued without review', 'It is marked as a draft, the report notes AI assistance, and you must review it', 'It sends worker names for accuracy'], a: 1 }
+];
+
+// ======================= LABS =======================
+const LABS = {
+  flow(el) {
+    const steps = [
+      ['Engagement', 'Client, site, scope and the locked decision standard (OEL rule, statistics, confidence, shift adjustment).', 'Hands on: the rules every result will be judged by, and the scope limitations.'],
+      ['OHID', 'Areas and zones, agents and sub-categories, the OEL library, tasks, screening readings, immediate concerns, equipment and labs.', 'Hands on: the hazard map, limits and checked equipment.'],
+      ['SEGs', 'Groups of workers sharing an exposure profile, with definition, rationale, headcount and shift length.', 'Hands on: groups to rate and sample, and the shift length that adjusts each OEL.'],
+      ['OHRA', 'Ratings for each SEG × agent profile, suggested work lists, risk matrix and monitoring plan.', 'Hands on: what to sample, how, how many and when.'],
+      ['Exposure', 'Samples, live statistics (X95, UCLs, EN 689, ROS for non-detects) and the hygienist\'s recorded decision.', 'Hands on: final categories and their evidence.'],
+      ['Controls', 'Control verification, RPE adequacy, recommendations, reassessment intervals, MOC and handover.', 'Hands on: actions and the monitoring programme.'],
+      ['Report', 'QA clearance, report generation and sign-off with a frozen snapshot hash.', 'Produces: the issued, traceable report.']];
+    el.innerHTML = `<div class="flow" role="group" aria-label="Workflow steps">${steps.map((s, i) => `<button aria-pressed="${i === 0}" data-i="${i}"><b>${i}</b><span>${s[0]}</span></button>`).join('')}</div><div class="flow-detail" aria-live="polite"></div>`;
+    const show = i => { el.querySelectorAll('.flow button').forEach(b => b.setAttribute('aria-pressed', b.dataset.i == i)); el.querySelector('.flow-detail').innerHTML = `<h3 style="margin-top:0">Step ${i}: ${steps[i][0]}</h3><p style="font:15px/1.6 var(--serif);margin:4px 0">${steps[i][1]}</p><p style="margin:6px 0 0;color:var(--accent-ink);font-weight:600;font-size:14px">${steps[i][2]}</p>`; };
+    el.querySelectorAll('.flow button').forEach(b => b.onclick = () => show(+b.dataset.i)); show(0);
+  },
+  confidence(el) {
+    const data = [0.12, 0.31, 0.08, 0.22, 0.64, 0.18, 0.41, 0.15];
+    el.innerHTML = `<div class="grid2"><div>
+      <div class="field"><label for="cfN">Number of results used: <b id="cfNv">8</b></label><input id="cfN" type="range" min="3" max="8" value="8"></div>
+      <div class="field"><label for="cfC">AIHA confidence level</label><select id="cfC"><option value="0.90">0.90</option><option value="0.95" selected>0.95 (default)</option><option value="0.99">0.99</option></select></div>
+      <div class="field"><label for="cfS">Shift adjustment model</label><select id="cfS"><option value="bs" selected>Brief &amp; Scala (12 h shifts)</option><option value="none">None</option></select></div>
+      <p class="mono" id="cfData"></p></div><div id="cfOut"></div></div>`;
+    const run = () => {
+      const n = +el.querySelector('#cfN').value, c = +el.querySelector('#cfC').value, bs = el.querySelector('#cfS').value === 'bs';
+      el.querySelector('#cfNv').textContent = n;
+      const oel = 0.5 * (bs ? OHStats.briefScala(12) : 1);
+      const r = OHStats.analyse(data.slice(0, n).map(v => ({ v, nd: false })), oel, { confAIHA: c, confEN: 0.70 });
+      el.querySelector('#cfData').textContent = 'Results (ppm): ' + data.slice(0, n).join(', ');
+      const cat = r.aihaCat, re = cat >= 3 ? 12 : cat === 2 ? 24 : 36;
+      el.querySelector('#cfOut').innerHTML = `<table class="kv"><tr><th>Applied OEL</th><td><b>${F(oel)} ppm</b> ${bs ? '(0.5 × RF 0.5)' : '(no adjustment)'}</td></tr>
+        <tr><th>GM / GSD</th><td>${F(r.gm)} ppm / ${F(r.gsd)}</td></tr><tr><th>X95</th><td>${F(r.x95)} ppm (${F(100 * r.x95 / oel, 3)}% of OEL)</td></tr>
+        <tr><th>X95 UCL${Math.round(c * 100)}</th><td>${F(r.x95ucl)} ppm</td></tr>
+        <tr><th>AIHA category</th><td><span class="cat cat${cat}">${cat}</span> from X95; <span class="cat cat${r.aihaCatUcl}">${r.aihaCatUcl}</span> from UCL</td></tr>
+        <tr><th>EN 689</th><td><span class="pill ${r.en689.outcome === 'Compliance' ? 'ok' : r.en689.outcome === 'Non-compliance' ? 'crit' : 'warn'}">${r.en689.outcome}</span> <span style="font-size:12.5px;color:var(--steel)">${esc(r.en689.test)}</span></td></tr>
+        <tr><th>If category ${cat} is adopted</th><td>Reassess in ${re} months${cat >= 3 ? '; source-control recommendation required' : ''}</td></tr></table>
+        <div class="callout" style="margin-top:10px">${n < 6 ? 'With fewer than 6 results, EN 689 can give only a preliminary result, and the profile is flagged as below the minimum.' : bs ? 'Switch the shift model to None: the same data now sits against 0.5 ppm. This is why shift length is fixed in the decision standard before fieldwork.' : 'Raise the confidence level to 0.99 and watch the UCL widen while X95 stays put.'}</div>`;
+    };
+    el.querySelectorAll('input,select').forEach(i => i.oninput = run); run();
+  },
+  premob(el) {
+    const eq = { 'PUMP-A': ['Zone 1', '2026-12-31'], 'PUMP-B': ['Not Ex-certified', '2027-01-31'], 'PUMP-C': ['Zone 1', '2026-06-30'], 'PUMP-D': ['Zone 2', '2026-11-30'] };
+    const rows = [['S1', 'PUMP-A', 'Condensate storage', 'Zone 1', 'OK', 'Zone 1 rating covers a Zone 1 area, and calibration is in date.'],
+      ['S2', 'PUMP-C', 'SRU / TGTU', 'Zone 2', 'Blocked', 'Calibration was due 30 June, before the 10 July survey date.'],
+      ['S3', 'PUMP-B', 'Laboratory', 'Non-hazardous', 'OK', 'No Ex rating is needed in a non-hazardous area; calibration is in date.'],
+      ['S4', 'PUMP-D', 'Condensate storage', 'Zone 1', 'Blocked', 'A Zone 2 rating does not cover Zone 1. Zone 1 needs Zone 1 or Zone 0 equipment.']];
+    el.innerHTML = `<div class="tw" style="margin-bottom:10px"><table class="t"><thead><tr><th>Equipment</th><th>Ex rating</th><th>Calibration due</th></tr></thead><tbody>${Object.entries(eq).map(([k, v]) => `<tr><td>${k}</td><td>${v[0]}</td><td>${v[1]}</td></tr>`).join('')}</tbody></table></div>
+      <div class="tw"><table class="t"><thead><tr><th>Sample</th><th>Equipment</th><th>Area</th><th>Zone</th><th>Your call</th></tr></thead><tbody>${rows.map((r, i) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><select data-i="${i}" aria-label="Decision for ${r[0]}"><option value=""></option><option>OK</option><option>Blocked</option></select><div class="fb" data-fb="${i}"></div></td></tr>`).join('')}</tbody></table></div>
+      <div class="btn-row" style="margin-top:10px"><button class="btn primary">Check answers</button></div>`;
+    el.querySelector('button').onclick = () => { let ok = 0; rows.forEach((r, i) => { const v = el.querySelector(`select[data-i="${i}"]`).value, good = v === r[4]; if (good) ok++; el.querySelector(`[data-fb="${i}"]`).innerHTML = `<span class="pill ${good ? 'ok' : 'crit'}">${good ? 'Correct' : 'Answer: ' + r[4]}</span> ${r[5]}`; }); toast(`${ok} of ${rows.length} correct`); };
+  },
+  shift(el) {
+    el.innerHTML = `<div class="grid2"><div><div class="field"><label for="shH">Shift length: <b id="shV">12</b> hours</label><input id="shH" type="range" min="8" max="14" step="0.5" value="12"></div>
+      <div class="field"><label for="shO">TWA OEL</label><input id="shO" type="number" step="any" value="1"></div></div><div id="shOut"></div></div>`;
+    const run = () => { const h = +el.querySelector('#shH').value, o = +el.querySelector('#shO').value || 0; el.querySelector('#shV').textContent = h; const rf = OHStats.briefScala(h);
+      el.querySelector('#shOut').innerHTML = `<table class="kv"><tr><th>Reduction factor</th><td><b>${F(rf)}</b></td></tr><tr><th>Applied TWA OEL</th><td><b>${F(o * rf)}</b> (from ${F(o)})</td></tr><tr><th>STEL / ceiling</th><td>Not adjusted</td></tr></table><div class="callout" style="margin-top:10px">${h <= 8 ? 'At 8 hours or less there is no adjustment.' : `A ${h}-hour worker gets ${F(24 - h)} hours of recovery instead of 16, so the limit drops to ${F(100 * rf, 3)}% of its 8-hour value.`}</div>`; };
+    el.querySelectorAll('input').forEach(i => i.oninput = run); run();
+  },
+  segsort(el) {
+    const segs = ['SEG-A Condensate field operators', 'SEG-B Turnaround vessel-entry contractors', 'SEG-C Control room operators'];
+    const w = [['W1', 'Job title: Field Operator. Samples condensate and gauges tanks daily, day shift.', 0, 'Same task, source and area as the condensate group.'],
+      ['W2', 'Job title: Field Operator. Assigned to the control room panel for this entire rotation.', 2, 'Group by what people actually do: this rotation he works the panel, not the field.'],
+      ['W3', 'Contractor fitter opening heat exchangers during the turnaround.', 1, 'Vessel and exchanger opening is the turnaround exposure, e.g. mercury deposits.'],
+      ['W4', 'Contractor scaffolder working inside a vessel during the turnaround.', 1, 'Inside the vessel with the opening crew: same environment and agents.'],
+      ['W5', 'Panel operator, control room, 12-hour shifts.', 2, 'Control room environment.'],
+      ['W6', 'Job title: Field Operator. Same condensate sampling and gauging, night shift.', 0, 'Same task on nights. Keep in SEG-A, but check results by shift in validation.']];
+    el.innerHTML = w.map((x, i) => `<div class="sort-item"><div><b>${x[0]}</b> <span style="font:15px/1.5 var(--serif)">${x[1]}</span><div class="fb" data-fb="${i}"></div></div><select data-i="${i}" aria-label="SEG for ${x[0]}"><option value=""></option>${segs.map((s, j) => `<option value="${j}">${s}</option>`).join('')}</select></div>`).join('') + '<div class="btn-row" style="margin-top:10px"><button class="btn primary">Check grouping</button></div>';
+    el.querySelector('button').onclick = () => { let ok = 0; w.forEach((x, i) => { const v = el.querySelector(`select[data-i="${i}"]`).value, good = v !== '' && +v === x[2]; if (good) ok++; el.querySelector(`[data-fb="${i}"]`).innerHTML = `<span class="pill ${good ? 'ok' : 'crit'}">${good ? 'Correct' : segs[x[2]].split(' ')[0]}</span> ${x[3]}`; }); toast(`${ok} of ${w.length} correct`); };
+  },
+  rate(el) {
+    const sc = [['Condensate operators × benzene', 'Open sample points, no measurements yet, condensate up to 0.4% benzene. Benzene is a known carcinogen.', 'Sample', 'A serious health effect with no data and low confidence: sampling is the priority.'],
+      ['Control room operators × H₂S', 'Positive-pressure building, fixed detectors at the air intake, alarm logs show no events in two years.', 'Confirm', 'Low expected exposure with high confidence: a few confirmatory samples, or judgement, is enough.'],
+      ['Granulation operators × sulphur dust', 'Visible dust clouds during dry sweeping; no RPE worn.', 'Act now', 'Obvious uncontrolled exposure: act before any data.'],
+      ['Warehouse staff × methanol', 'Sealed drums, occasional decanting by hand, no ventilation records. Health effect rated 3.', 'Sample', 'Expected exposure is low, but confidence is low and the effect is serious, so sample.']];
+    const sugg = (erc, her, conf, act) => { if (act) return 'Act now'; if (erc === '') return ''; erc = +erc; her = +her; if (erc >= 3 || (her >= 3 && (erc >= 2 || conf === 'Low'))) return 'Sample'; if (erc <= 1 && conf !== 'Low') return 'Confirm'; return 'Sample'; };
+    el.innerHTML = sc.map((s, i) => `<div class="sort-item" style="grid-template-columns:1fr"><div><b>${s[0]}</b><p style="font:15px/1.5 var(--serif);margin:4px 0 8px;color:var(--steel)">${s[1]}</p>
+      <div class="btn-row"><label>Exposure <select data-k="erc" data-i="${i}"><option value=""></option>${[0, 1, 2, 3, 4].map(x => `<option>${x}</option>`).join('')}</select></label>
+      <label>Health effect <select data-k="her" data-i="${i}">${[1, 2, 3, 4].map(x => `<option${x === 3 ? ' selected' : ''}>${x}</option>`).join('')}</select></label>
+      <label>Confidence <select data-k="conf" data-i="${i}"><option>High</option><option selected>Medium</option><option>Low</option></select></label>
+      <label><input type="checkbox" data-k="act" data-i="${i}"> Act now</label>
+      <span>Suggested: <b data-out="${i}">\u2013</b></span></div><div class="fb" data-fb="${i}"></div></div></div>`).join('') + '<div class="btn-row" style="margin-top:10px"><button class="btn primary">Check my ratings</button></div>';
+    const val = (i, k) => { const e = el.querySelector(`[data-k="${k}"][data-i="${i}"]`); return e.type === 'checkbox' ? e.checked : e.value; };
+    const upd = () => sc.forEach((s, i) => { el.querySelector(`[data-out="${i}"]`).textContent = sugg(val(i, 'erc'), val(i, 'her'), val(i, 'conf'), val(i, 'act')) || '\u2013'; });
+    el.querySelectorAll('select,input').forEach(x => x.onchange = upd); upd();
+    el.querySelector('button.primary').onclick = () => { let ok = 0; sc.forEach((s, i) => { const r = sugg(val(i, 'erc'), val(i, 'her'), val(i, 'conf'), val(i, 'act')), good = r === s[2]; if (good) ok++; el.querySelector(`[data-fb="${i}"]`).innerHTML = `<span class="pill ${good ? 'ok' : 'crit'}">${good ? 'Matches' : 'Expected: ' + s[2]}</span> ${s[3]}`; }); toast(`${ok} of ${sc.length} match the expected list`); };
+  },
+  statlab(el) {
+    const presets = { 'Well-behaved, n = 8': { oel: 1, d: [[0.12], [0.3], [0.05], [0.22], [0.6], [0.18], [0.4], [0.09]] },
+      'With non-detects': { oel: 25, d: [[4.2], [2, 1], [11.5], [7.9], [2, 1], [5.1], [2, 1], [9.3]] },
+      'Mostly non-detects': { oel: 25, d: [[3.1], [2, 1], [6.4], [2, 1], [2, 1], [2, 1], [2, 1], [2, 1]] },
+      'Mixed SEG (two groups)': { oel: 1, d: [[0.02], [0.03], [0.025], [0.04], [0.6], [0.9], [0.75], [0.035]] },
+      'Preliminary, n = 4': { oel: 1, d: [[0.04], [0.06], [0.11], [0.05]] } };
+    el.innerHTML = `<div class="btn-row" style="margin-bottom:10px">${Object.keys(presets).map(k => `<button class="btn" data-p="${esc(k)}">${esc(k)}</button>`).join('')}</div>
+      <div class="grid2"><div><div class="field"><label for="slO">OEL (same unit as results)</label><input id="slO" type="number" step="any"></div>
+      <div class="tw"><table class="t"><thead><tr><th>#</th><th>Result</th><th>ND</th></tr></thead><tbody id="slRows"></tbody></table></div>
+      <div class="btn-row" style="margin-top:8px"><button class="btn" id="slAdd">Add result</button><button class="btn" id="slDel">Remove last</button></div></div>
+      <div><div id="slOut"></div><div class="plot" id="slPlot"></div></div></div>`;
+    let rows = [];
+    const draw = () => { el.querySelector('#slRows').innerHTML = rows.map((r, i) => `<tr><td>${i + 1}</td><td><input type="number" step="any" data-r="${i}" value="${r[0]}" aria-label="Result ${i + 1}"></td><td><input type="checkbox" data-n="${i}"${r[1] ? ' checked' : ''} aria-label="Non-detect ${i + 1}"></td></tr>`).join('');
+      el.querySelectorAll('[data-r]').forEach(x => x.oninput = () => { rows[+x.dataset.r][0] = x.value; calc(); });
+      el.querySelectorAll('[data-n]').forEach(x => x.onchange = () => { rows[+x.dataset.n][1] = x.checked ? 1 : 0; calc(); }); calc(); };
+    const calc = () => {
+      const oel = +el.querySelector('#slO').value || null;
+      const obs = rows.filter(r => +r[0] > 0).map(r => ({ v: +r[0], nd: !!r[1] }));
+      const st = OHStats.analyse(obs, oel, {});
+      if (st.n < 2) { el.querySelector('#slOut').innerHTML = '<p class="callout warn">Enter at least 2 positive results.</p>'; el.querySelector('#slPlot').innerHTML = ''; return; }
+      const sub = obs.map(o => o.nd ? o.v / 2 : o.v).map(Math.log), m = OHStats.mean(sub), s = OHStats.sd(sub);
+      const en = st.en689;
+      el.querySelector('#slOut').innerHTML = `<table class="kv"><tr><th>n (non-detects)</th><td>${st.n} (${st.nd})</td></tr><tr><th>Non-detect method</th><td>${esc(st.censorMethod)}</td></tr>
+        <tr><th>GM / GSD</th><td>${F(st.gm)} / ${F(st.gsd)}</td></tr>${st.nd ? `<tr><th>If LOD/2 were used</th><td>GM ${F(Math.exp(m))} / GSD ${F(Math.exp(s))}</td></tr>` : ''}
+        <tr><th>X95 (UCL95)</th><td>${F(st.x95)} (${F(st.x95ucl)})</td></tr><tr><th>AM UCL95</th><td>${F(st.amUcl)}</td></tr>
+        ${oel ? `<tr><th>Exceedance fraction</th><td>${F(100 * st.ef, 3)}%${st.efUcl !== undefined ? ` (UCL ${F(100 * st.efUcl, 3)}%)` : ''}</td></tr><tr><th>AIHA category</th><td><span class="cat cat${st.aihaCat}">${st.aihaCat}</span></td></tr>
+        <tr><th>EN 689</th><td>${en ? `<span class="pill ${en.outcome === 'Compliance' ? 'ok' : en.outcome === 'Non-compliance' ? 'crit' : 'warn'}">${en.outcome}</span> <span style="font-size:12.5px;color:var(--steel)">${esc(en.test)}</span>` : '\u2013'}</td></tr>` : ''}
+        <tr><th>Lognormal fit</th><td>r = ${F(st.ppcc)}</td></tr></table>${(st.flags || []).map(f => `<div class="callout warn">${esc(f)}</div>`).join('')}`;
+      el.querySelector('#slPlot').innerHTML = plot(st, oel);
+    };
+    const load = k => { rows = presets[k].d.map(r => [r[0], r[1] || 0]); el.querySelector('#slO').value = presets[k].oel; draw(); };
+    el.querySelectorAll('[data-p]').forEach(b => b.onclick = () => load(b.dataset.p));
+    el.querySelector('#slO').oninput = calc;
+    el.querySelector('#slAdd').onclick = () => { rows.push(['', 0]); draw(); };
+    el.querySelector('#slDel').onclick = () => { rows.pop(); draw(); };
+    load('With non-detects');
+  },
+  rpe(el) {
+    el.innerHTML = `<div class="grid2"><div>
+      <div class="field"><label for="rpU">X95 UCL</label><input id="rpU" type="number" step="any" value="1.87"></div>
+      <div class="field"><label for="rpO">Applied OEL (same unit)</label><input id="rpO" type="number" step="any" value="0.25"></div>
+      <div class="field"><label for="rpA">RPE in use (example APFs; use your jurisdiction's table)</label><select id="rpA"><option value="10">Half-mask, APF 10</option><option value="40">Full-face filtering, APF 40</option><option value="20">Loose-fitting powered hood, APF 20</option><option value="2000">Pressure-demand airline / SCBA, APF 2000</option></select></div>
+      <div class="field"><label for="rpC">Final category adopted</label><select id="rpC"><option>0</option><option>1</option><option>2</option><option>3</option><option selected>4</option></select></div></div><div id="rpOut"></div></div>`;
+    const run = () => { const u = +el.querySelector('#rpU').value, o = +el.querySelector('#rpO').value, a = +el.querySelector('#rpA').value, c = +el.querySelector('#rpC').value;
+      const req = o > 0 ? u / o : NaN; const v = !(req > 0) ? ['none', 'Needs data'] : req <= 1 ? ['ok', 'RPE not required by data'] : a >= req ? ['ok', 'Adequate'] : ['crit', 'Inadequate'];
+      el.querySelector('#rpOut').innerHTML = `<table class="kv"><tr><th>Required PF</th><td><b>${F(req, 3)}</b></td></tr><tr><th>Assigned PF</th><td>${a}</td></tr><tr><th>Adequacy</th><td><span class="pill ${v[0]}">${v[1]}</span></td></tr><tr><th>Default reassessment</th><td>${c >= 3 ? 12 : c === 2 ? 24 : 36} months</td></tr></table>
+        <div class="callout${v[1] === 'Inadequate' ? ' crit' : ''}" style="margin-top:10px">${v[1] === 'Inadequate' ? 'The respirator cannot deliver the protection the data demands. Recommend source controls first, and better RPE as an interim measure.' : c >= 3 ? 'Even with adequate RPE, a category 3–4 profile needs a source-control recommendation; PPE-only is flagged.' : 'Check fit-test records and suitability for heat before relying on this.'}</div>`; };
+    el.querySelectorAll('input,select').forEach(i => i.oninput = run); run();
+  },
+  qa(el) {
+    const items = [['A non-detect was entered without an LOD value.', 'Block', 'Without the LOD there is no number to analyse.'],
+      ['The survey pump was 3 days past its calibration due date.', 'Block', 'A result from out-of-calibration equipment cannot support a conclusion.'],
+      ['H₂S STEL result from a monitor whose datalog was not verified.', 'Block', 'An alarm monitor is not an exposure monitor unless logging was on and downloaded.'],
+      ['Post-sample flow differed from pre-sample flow by 7%.', 'Flag', 'Over the 5% limit: exclude the sample, or acknowledge with a justification.'],
+      ['The profile has 4 valid results; the minimum is 6.', 'Flag', 'You may proceed with a limited decision if you explain why.'],
+      ['The decision standard has not been locked.', 'Flag', 'Lock it with the client, or acknowledge why not.'],
+      ['SEG-04 is still in Draft status.', 'Info', 'A reminder that the principal has not approved it yet.'],
+      ['An area is not marked visited and has no reason recorded.', 'Info', 'Record a reason so it appears properly in the limitations.']];
+    el.innerHTML = items.map((x, i) => `<div class="sort-item"><div><span style="font:15px/1.5 var(--serif)">${x[0]}</span><div class="fb" data-fb="${i}"></div></div><select data-i="${i}" aria-label="Level"><option value=""></option><option>Block</option><option>Flag</option><option>Info</option></select></div>`).join('') + '<div class="btn-row" style="margin-top:10px"><button class="btn primary">Check triage</button></div>';
+    el.querySelector('button').onclick = () => { let ok = 0; items.forEach((x, i) => { const v = el.querySelector(`select[data-i="${i}"]`).value, good = v === x[1]; if (good) ok++; el.querySelector(`[data-fb="${i}"]`).innerHTML = `<span class="pill ${good ? 'ok' : 'crit'}">${good ? 'Correct' : 'Answer: ' + x[1]}</span> ${x[2]}`; }); toast(`${ok} of ${items.length} correct`); };
+  },
+  snap(el) {
+    const st = { seg: 'Condensate field operators', x95: '0.657', cat: '4', rec: 'Install closed-loop sampling at SP-3 and SP-4' };
+    let signed = null, chain = [];
+    const sha = async t => { if (!(window.crypto && crypto.subtle)) return 'unavailable-in-this-browser'; const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); };
+    el.innerHTML = `<div class="grid2"><div><h3 style="margin-top:0">Engagement data</h3>${Object.keys(st).map(k => `<div class="field"><label for="sn_${k}">${{ seg: 'SEG name', x95: 'X95 (ppm)', cat: 'Final category', rec: 'Recommendation' }[k]}</label><input id="sn_${k}" data-k="${k}" value="${esc(st[k])}"></div>`).join('')}
+      <div class="btn-row"><button class="btn primary" id="snSign">Sign and freeze snapshot</button></div></div>
+      <div><h3 style="margin-top:0">Status</h3><div id="snStat"></div><h3>Audit chain</h3><div id="snChain"></div><div class="btn-row" style="margin-top:8px"><button class="btn" id="snTamper">Tamper with entry 1</button><button class="btn" id="snVerify">Verify chain</button></div></div></div>`;
+    const stat = async () => { const h = await sha(JSON.stringify(st)); el.querySelector('#snStat').innerHTML = signed ? (h === signed ? `<div class="callout ok">Signed. Snapshot hash matches the data.<br><span class="mono">${signed}</span></div>` : `<div class="callout crit">Data changed after signing: sign-off withdrawn.<br>Signed: <span class="mono">${signed.slice(0, 24)}\u2026</span><br>Now: <span class="mono">${h.slice(0, 24)}\u2026</span></div>`) : `<div class="callout">Not signed. Current data hash:<br><span class="mono">${h}</span></div>`;
+      el.querySelector('#snChain').innerHTML = chain.length ? `<div class="tw"><table class="t"><thead><tr><th>#</th><th>Entry</th><th>Hash</th></tr></thead><tbody>${chain.map((c, i) => `<tr><td>${i + 1}</td><td>${esc(c.d)}</td><td class="mono">${c.h.slice(0, 16)}\u2026</td></tr>`).join('')}</tbody></table></div>` : '<p style="font-size:13.5px;color:var(--steel)">Edit a field to create audit entries.</p>'; };
+    const add = async d => { const prev = chain.length ? chain[chain.length - 1].h : 'GENESIS'; chain.push({ d, prev, h: await sha(prev + d) }); };
+    el.querySelectorAll('[data-k]').forEach(i => i.onchange = async () => { const old = st[i.dataset.k]; st[i.dataset.k] = i.value; await add(`${i.dataset.k}: ${old} \u2192 ${i.value}`); if (signed) await add('Sign-off withdrawn: data changed after signing'); await stat(); if (signed && (await sha(JSON.stringify(st))) !== signed) signed = null; });
+    el.querySelector('#snSign').onclick = async () => { signed = await sha(JSON.stringify(st)); await add('Report signed, snapshot ' + signed.slice(0, 12)); await stat(); };
+    el.querySelector('#snTamper').onclick = async () => { if (!chain.length) return toast('Make an edit first to create entries.'); chain[0].d += ' (edited later)'; await stat(); toast('Entry 1 altered. Now verify the chain.'); };
+    el.querySelector('#snVerify').onclick = async () => { let prev = 'GENESIS', bad = -1; for (let i = 0; i < chain.length; i++) { const h = await sha(prev + chain[i].d); if (chain[i].prev !== prev || h !== chain[i].h) { bad = i; break; } prev = chain[i].h; } toast(bad < 0 ? `Chain intact (${chain.length} entries).` : `Chain broken at entry ${bad + 1}.`); };
+    stat();
+  },
+  adnoc(el) {
+    const M = OHStats.ADNOC_MATRIX, col = { R: '#D33A2C', O: '#EE9A2E', Y: '#F2D533', G: '#4C9A57' };
+    const sev = { 6: 'Disastrous', 5: 'Catastrophic', 4: 'Major', 3: 'Serious', 2: 'Minor', 1: 'Notable' }, lk = { A: 'Rare', B: 'Unlikely', C: 'Possible', D: 'Likely', E: 'Very likely', F: 'Almost certain' };
+    el.innerHTML = `<div class="tw"><table class="t matrix"><thead><tr><th>Severity \u2193 / Likelihood \u2192</th>${'ABCDEF'.split('').map(l => `<th>${l} ${lk[l]}</th>`).join('')}</tr></thead><tbody>${[6, 5, 4, 3, 2, 1].map(s => `<tr><th>${s} ${sev[s]}</th>${'ABCDEF'.split('').map((l, i) => `<td tabindex="0" role="button" aria-label="${s}${l}" data-s="${s}" data-l="${l}" style="background:${col[M[s][i]]};color:${M[s][i] === 'R' ? '#fff' : '#16232B'}">${s}${l}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      <div id="adOut" class="callout" style="margin-top:10px">Select a cell to see its rating and required actions.</div>
+      <h3>Quantitative stage: 95% UCL as a percentage of the OEL</h3><div class="grid2"><div class="field"><label for="adU">95% UCL = <b id="adUv">35</b>% of OEL</label><input id="adU" type="range" min="0" max="300" value="35"></div><div id="adQ"></div></div>`;
+    const act = { 1: 'Stop the high-risk activity, investigate, put all controls in place before work restarts, and monitor until below the OEL. Senior management intervention.', 2: 'Verify controls, monitor and modify until below the OEL, re-monitor annually, health surveillance as appropriate.', 3: 'Regular monitoring (at least every 3 years), improve work practices, verify controls such as PPE.', 4: 'Improve procedures and training (HAZCOM); periodic assessment at least every 5 years.' };
+    const pick = td => { el.querySelectorAll('.matrix td').forEach(x => x.classList.remove('sel')); td.classList.add('sel'); const h = OHStats.adnocHRR(td.dataset.s, td.dataset.l);
+      el.querySelector('#adOut').innerHTML = `<b>${h.code}: ${h.label}</b>. ${act[h.n]} ${h.n <= 2 ? 'Treated as non-ALARP: a Remedial Action Plan is required.' : 'Treated as ALARP: routine monitoring.'} ${+td.dataset.s >= 3 || h.n <= 3 ? 'Quantitative assessment required, or a recorded justification.' : 'Quantitative assessment not required.'}`; };
+    el.querySelectorAll('.matrix td').forEach(td => { td.onclick = () => pick(td); td.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(td); } }; });
+    const q = () => { const p = +el.querySelector('#adU').value; el.querySelector('#adUv').textContent = p; const r = p / 100, l = OHStats.adnocQuantLikelihood(r);
+      el.querySelector('#adQ').innerHTML = `<table class="kv"><tr><th>Quantitative likelihood</th><td><b>${l} ${lk[l]}</b></td></tr><tr><th>Survey frequency</th><td>${OHStats.adnocFrequency(r)}</td></tr><tr><th>Health Surveillance Plan</th><td>${r > 0.5 ? '<span class="pill warn">Include SEG</span>' : 'Not triggered'}</td></tr><tr><th>With severity 6</th><td>${OHStats.adnocHRR(6, l).code} ${OHStats.adnocHRR(6, l).label}</td></tr></table>`; };
+    el.querySelector('#adU').oninput = q; q();
+  }
+};
+
+// log-probability plot (as in OHA Studio)
+function plot(st, oel) {
+  if (!st.plot || st.plot.length < 2) return '';
+  const W = 440, H = 300, ml = 52, mr = 14, mt = 14, mb = 42, pw = W - ml - mr, ph = H - mt - mb;
+  const vals = st.plot.map(p => p.v).concat(oel ? [oel] : []).concat([st.x95]);
+  let lo = Math.floor(Math.log10(Math.min(...vals) / 1.2)), hi = Math.ceil(Math.log10(Math.max(...vals) * 1.2)); if (hi === lo) hi = lo + 1;
+  const zmin = -2.6, zmax = 2.6, X = z => ml + (z - zmin) / (zmax - zmin) * pw, Y = v => mt + ph - (Math.log10(v) - lo) / (hi - lo) * ph;
+  let g = ''; [1, 5, 10, 25, 50, 75, 90, 95, 99].forEach(pc => { const x = X(OHStats.normInv(pc / 100)); g += `<line x1="${x}" x2="${x}" y1="${mt}" y2="${mt + ph}" stroke="#E2E8EC"/><text x="${x}" y="${mt + ph + 15}" font-size="10" text-anchor="middle" fill="#55656F">${pc}</text>`; });
+  for (let d = lo; d <= hi; d++) { const y = Y(10 ** d); g += `<line x1="${ml}" x2="${ml + pw}" y1="${y}" y2="${y}" stroke="#D3DBE0"/><text x="${ml - 6}" y="${y + 3.5}" font-size="10" text-anchor="end" fill="#55656F">${F(10 ** d)}</text>`; }
+  const lgm = Math.log(st.gm), ls = Math.log(st.gsd), fit = z => Math.exp(lgm + ls * z), cid = 'c' + Math.random().toString(36).slice(2, 7);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Log-probability plot"><rect x="${ml}" y="${mt}" width="${pw}" height="${ph}" fill="#fff" stroke="#B7C3CA"/>${g}<clipPath id="${cid}"><rect x="${ml}" y="${mt}" width="${pw}" height="${ph}"/></clipPath><line clip-path="url(#${cid})" x1="${X(zmin)}" y1="${Y(fit(zmin))}" x2="${X(zmax)}" y2="${Y(fit(zmax))}" stroke="#55656F" stroke-dasharray="4 3"/>${oel ? `<line x1="${ml}" x2="${ml + pw}" y1="${Y(oel)}" y2="${Y(oel)}" stroke="#B3261E" stroke-width="1.5"/><text x="${ml + pw - 4}" y="${Y(oel) - 5}" font-size="11" text-anchor="end" fill="#B3261E" font-weight="600">OEL ${F(oel)}</text>` : ''}${st.plot.map(p => `<circle cx="${X(p.z)}" cy="${Y(p.v)}" r="4.2" fill="${p.imputed ? '#fff' : '#1D5FA8'}" stroke="#1D5FA8" stroke-width="1.5"/>`).join('')}<text x="${ml + pw / 2}" y="${H - 6}" font-size="11" text-anchor="middle" fill="#16232B">Cumulative probability (%)</text></svg><p style="font-size:12.5px;color:var(--steel);margin:4px 0 0">Filled: measured. Hollow: imputed non-detect. Dashed: fitted lognormal.</p>`;
+}
+
+// ======================= QUIZ ENGINE =======================
+function quizHTML(qs, final) {
+  return `<div class="quiz">${qs.map(q => { const st = final ? P.final.answers[q.id] : P.q[q.id];
+    return `<div class="q" data-q="${q.id}">${q.scen ? `<p class="scen">${q.scen}</p>` : ''}<p class="stem">${q.stem}</p><div class="opts">${q.opts.map((o, i) => `<button data-o="${i}"${final && st !== undefined ? ' disabled' : ''} class="${final && st !== undefined ? (i === q.a ? 'right' : i === st ? 'wrong' : '') : (st === 'ok' && i === q.a ? 'right' : '')}">${esc(o)}</button>`).join('')}</div><div class="fb" aria-live="polite">${!final && st === 'ok' ? `<span class="pill ok">Correct</span> ${q.why}` : ''}${final && st !== undefined ? (st === q.a ? '<span class="pill ok">Correct</span>' : '<span class="pill crit">Incorrect</span>') : ''}</div></div>`; }).join('')}</div>`;
+}
+function bindQuiz(root, qs, mod, final) {
+  root.querySelectorAll('.q').forEach(qe => { const q = qs.find(x => x.id === qe.dataset.q);
+    qe.querySelectorAll('.opts button').forEach(b => b.onclick = () => {
+      const i = +b.dataset.o, fb = qe.querySelector('.fb');
+      if (final) { if (P.final.answers[q.id] !== undefined) return; P.final.answers[q.id] = i; save(); qe.querySelectorAll('.opts button').forEach(x => { x.disabled = true; if (+x.dataset.o === q.a) x.classList.add('right'); else if (+x.dataset.o === i) x.classList.add('wrong'); });
+        fb.innerHTML = i === q.a ? '<span class="pill ok">Correct</span>' : '<span class="pill crit">Incorrect</span>'; updateFinal(); return; }
+      qe.querySelectorAll('.opts button').forEach(x => x.classList.remove('right', 'wrong'));
+      if (i === q.a) { b.classList.add('right'); fb.innerHTML = `<span class="pill ok">Correct</span> ${q.why}`; P.q[q.id] = 'ok'; }
+      else { b.classList.add('wrong'); fb.innerHTML = '<span class="pill crit">Not quite</span> Try another answer.'; if (P.q[q.id] !== 'ok') P.q[q.id] = 'tried'; }
+      save(); checkModule(mod); }); });
+}
+function checkModule(m) {
+  const all = m.quiz.every(q => P.q[q.id] === 'ok');
+  if (all && !P.done[m.id]) { P.done[m.id] = true; save(); toast(`Module ${m.n} complete`); renderRail(); const nb = $('#nextHint'); if (nb) nb.innerHTML = '<span class="pill ok">Module complete</span>'; }
+}
+
+// ======================= RENDER =======================
+let cur = (() => { try { return location.hash.slice(1); } catch (e) { return ''; } })() || P.last || 'm0';
+if (cur !== 'final' && !MODS.some(m => m.id === cur)) cur = 'm0';
+function renderRail() {
+  const total = MODS.length + 1, done = MODS.filter(m => P.done[m.id]).length + (P.final.passed ? 1 : 0);
+  $('#progTxt').textContent = `${done} of ${total} complete`; $('#progBar').style.width = (100 * done / total) + '%';
+  $('#rail').innerHTML = `<ol class="train">${MODS.concat([{ id: 'final', n: 10, t: 'Final assessment', s: 'Scenarios and certificate' }]).map(m => { const d = m.id === 'final' ? P.final.passed : P.done[m.id]; const started = m.id === 'final' ? Object.keys(P.final.answers).length : (m.quiz || []).some(q => P.q[q.id]);
+    return `<li><button data-go="${m.id}"${cur === m.id ? ' aria-current="page"' : ''}><span class="dot ${d ? 'done' : started ? 'started' : ''}" aria-hidden="true">${m.n}</span><span class="lbl"><b>${m.t}</b><span>${m.s}</span></span></button></li>`; }).join('')}</ol>
+    <div style="padding:14px 20px;font-size:12.5px;color:var(--steel)"><button class="btn" data-reset style="width:100%">Reset my progress</button></div>`;
+  $('#rail').querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go));
+  $('#rail').querySelector('[data-reset]').onclick = () => { if (confirm('Clear all progress and answers?')) { P = { done: {}, q: {}, final: { answers: {} } }; save(); go('m0'); } };
+}
+function go(id) { cur = id; P.last = id; save(); try { history.replaceState(null, '', '#' + id); } catch (e) { /* sandboxed preview: address bar cannot change */ } render(); $('#main').scrollTop = 0; $('#main').focus({ preventScroll: true }); }
+function render() {
+  renderRail();
+  if (cur === 'final') return renderFinal();
+  const i = MODS.findIndex(m => m.id === cur), m = MODS[i] || MODS[0];
+  $('#view').innerHTML = `<div class="mod-head"><div class="num">Module ${m.n} of 10</div><h1>${m.t}</h1><p class="lede">${m.lede}</p><div class="meta-row"><span>About ${m.time}</span><span>${m.s}</span></div></div>
+    <div class="sec">${obj(m.obj)}</div>${m.body()}
+    <div class="sec"><h2>Knowledge check</h2><p style="font:15px/1.6 var(--serif);color:var(--steel);margin:0 0 4px">Answer every question correctly to complete the module. You can retry.</p>${quizHTML(m.quiz)}
+    <div class="next-row"><span id="nextHint">${P.done[m.id] ? '<span class="pill ok">Module complete</span>' : ''}</span><div class="btn-row">${i > 0 ? `<button class="btn" data-go="${MODS[i - 1].id}">Previous module</button>` : ''}<button class="btn primary" data-go="${i < MODS.length - 1 ? MODS[i + 1].id : 'final'}">${i < MODS.length - 1 ? 'Next module' : 'Go to final assessment'}</button></div></div></div>`;
+  $('#view').querySelectorAll('[data-lab]').forEach(el => LABS[el.dataset.lab](el));
+  bindQuiz($('#view'), m.quiz, m, false);
+  $('#view').querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go));
+}
+function finalScore() { const a = P.final.answers; const n = FINAL.filter(q => a[q.id] === q.a).length; return { n, done: Object.keys(a).length }; }
+function updateFinal() {
+  const s = finalScore(), el = $('#finalRes'); if (!el) return;
+  if (s.done < FINAL.length) { el.innerHTML = `<p style="color:var(--steel)">${s.done} of ${FINAL.length} answered.</p>`; return; }
+  const pct = Math.round(100 * s.n / FINAL.length), pass = pct >= 80;
+  if (pass && !P.final.passed) { P.final.passed = true; P.final.date = new Date().toISOString().slice(0, 10); P.final.score = pct; save(); renderRail(); }
+  el.innerHTML = pass ? `<div class="callout ok no-print"><b>Passed with ${pct}%.</b> Enter your name to complete your certificate.</div>
+    <div class="field no-print" style="max-width:360px"><label for="certName">Name for the certificate</label><input id="certName" value="${esc(P.final.name || '')}"></div>
+    <div class="cert" id="cert"><svg width="40" height="40" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1D5FA8"/><path d="M7 23 L13 15 L18 19 L25 8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg><h2>Certificate of completion</h2><p style="margin:0;color:var(--steel)">This certifies that</p><div class="who" id="certWho">${esc(P.final.name || 'Your name')}</div><p style="margin:0">has completed the <b>OHA Studio training programme</b> (10 modules and the final assessment)</p><p style="color:var(--steel)">Score ${P.final.score || pct}% · ${esc(P.final.date || '')} · Risk2Safe / H²S Consultants</p></div>
+    <div class="btn-row no-print" style="margin-top:12px"><button class="btn primary" id="printCert">Print certificate</button><button class="btn" id="retake">Retake assessment</button></div>`
+    : `<div class="callout crit"><b>${pct}%.</b> The pass mark is 80%. Review the modules for the questions you missed, then retake.</div><div class="btn-row"><button class="btn primary" id="retake">Retake assessment</button></div>`;
+  const nm = $('#certName'); if (nm) nm.oninput = () => { P.final.name = nm.value; save(); $('#certWho').textContent = nm.value || 'Your name'; };
+  const pr = $('#printCert'); if (pr) pr.onclick = () => window.print();
+  $('#retake').onclick = () => { P.final.answers = {}; P.final.passed = false; save(); render(); };
+}
+function renderFinal() {
+  const ready = MODS.filter(m => P.done[m.id]).length;
+  $('#view').innerHTML = `<div class="mod-head no-print"><div class="num">Module 10 of 10</div><h1>Final assessment</h1><p class="lede">Fourteen scenarios drawn from the whole workflow. Each question allows one attempt. The pass mark is 80%, and passing unlocks a printable certificate.</p><div class="meta-row"><span>About 15 min</span><span>${ready} of ${MODS.length} modules completed</span></div></div>
+    ${ready < MODS.length ? `<div class="callout warn no-print">You have completed ${ready} of ${MODS.length} modules. You can take the assessment now, but finishing the modules first is recommended.</div>` : ''}
+    <div class="sec no-print">${quizHTML(FINAL, true)}</div><div class="sec" id="finalRes"></div>`;
+  bindQuiz($('#view'), FINAL, null, true); updateFinal();
+}
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (h && h !== cur) { cur = h; render(); } });
+render();
+
+</script>
+</body>
+</html>
